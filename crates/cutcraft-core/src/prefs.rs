@@ -65,6 +65,8 @@ pub struct Prefs {
     pub maker3: crate::grbl::Maker3Options,
     /// The Cricut Explore 3 on cutcutgo: its own heights, speeds and offsets.
     pub explore3: crate::grbl::Maker3Options,
+    /// The original Cricut Maker's settings.
+    pub maker1: crate::grbl::Maker3Options,
     /// Edit-bar anchor point (0..9, row-major from the top-left).
     pub anchor: usize,
     /// Line the dragged selection up with other shapes and the page.
@@ -87,7 +89,11 @@ impl Prefs {
     /// The settings for `machine` if it's a Cricut on cutcutgo, with its model set.
     pub fn cricut_mut(&mut self, machine: &str) -> &mut crate::grbl::Maker3Options {
         let model = crate::grbl::cricut_model(machine).unwrap_or_default();
-        let o = if model == crate::grbl::CricutModel::Explore3 { &mut self.explore3 } else { &mut self.maker3 };
+        let o = match model {
+            crate::grbl::CricutModel::Explore3 => &mut self.explore3,
+            crate::grbl::CricutModel::Maker1 => &mut self.maker1,
+            crate::grbl::CricutModel::Maker3 => &mut self.maker3,
+        };
         o.model = model;
         o
     }
@@ -95,7 +101,11 @@ impl Prefs {
     /// A copy of [`Prefs::cricut_mut`]'s settings.
     pub fn cricut(&self, machine: &str) -> crate::grbl::Maker3Options {
         let model = crate::grbl::cricut_model(machine).unwrap_or_default();
-        let mut o = if model == crate::grbl::CricutModel::Explore3 { self.explore3.clone() } else { self.maker3.clone() };
+        let mut o = match model {
+            crate::grbl::CricutModel::Explore3 => self.explore3.clone(),
+            crate::grbl::CricutModel::Maker1 => self.maker1.clone(),
+            crate::grbl::CricutModel::Maker3 => self.maker3.clone(),
+        };
         o.model = model;
         o
     }
@@ -124,6 +134,7 @@ impl Default for Prefs {
             grbl: Default::default(),
             maker3: Default::default(),
             explore3: crate::grbl::Maker3Options::explore3(),
+            maker1: crate::grbl::Maker3Options::maker1(),
             anchor: 0,
             smart_guides: true,
             snap_objects: true,

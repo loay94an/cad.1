@@ -200,6 +200,8 @@ pub const MAKER3_USB: (u16, u16) = (0x04D8, 0x000A);
 
 /// The machine id of the Cricut Explore 3 running cutcutgo.
 pub const EXPLORE3_ID: &str = "explore3_cutcutgo";
+/// The machine id of the original Cricut Maker running cutcutgo (its servo build).
+pub const MAKER1_ID: &str = "maker1_cutcutgo";
 
 /// Whether `machine` is a Cricut on the cutcutgo firmware (a Maker 3 or an
 /// Explore 3): same protocol, same rules, a few differences in
@@ -213,6 +215,7 @@ pub fn cricut_model(machine: &str) -> Option<CricutModel> {
     match machine {
         MAKER3_ID => Some(CricutModel::Maker3),
         EXPLORE3_ID => Some(CricutModel::Explore3),
+        MAKER1_ID => Some(CricutModel::Maker1),
         _ => None,
     }
 }
@@ -227,9 +230,15 @@ pub enum CricutModel {
     #[default]
     Maker3,
     /// Two clamps (pen, fine-point blade) on small steppers: no drive
-    /// housing and no tool scan, no homing at power-on, clamps down to
-    /// Z-8.5. Print & Cut works as on the Maker 3, with its own sensor.
+    /// housing and no tool scan, clamps down to Z-8.5 that lose steps
+    /// silently (so every job homes). Print & Cut works as on the Maker 3,
+    /// with its own sensor.
     Explore3,
+    /// The original Maker: the Maker 3's tools, `M3` and Print & Cut, with
+    /// its own scales (the firmware's business), holder B offset, pen height
+    /// and the Explore 3's sensor chip. It reports $100=11.76 (the Maker 3
+    /// and Explore 3 report 8.977).
+    Maker1,
 }
 
 impl CricutModel {
@@ -237,6 +246,36 @@ impl CricutModel {
         match self {
             CricutModel::Maker3 => "Cricut Maker 3",
             CricutModel::Explore3 => "Cricut Explore 3",
+            CricutModel::Maker1 => "Cricut Maker",
+        }
+    }
+
+    /// The X steps/mm it reports as `$100`, to tell the models apart (they
+    /// share a USB ID and version line).
+    pub fn x_steps(self) -> f64 {
+        match self {
+            CricutModel::Maker1 => 11.76,
+            _ => 8.977,
+        }
+    }
+
+    /// Which model reports `x_steps` as its `$100`.
+    pub fn from_x_steps(x_steps: f64) -> Option<CricutModel> {
+        // a Maker 3 and an Explore 3 both report 8.977: that doesn't tell which
+        CricutModel::Maker1.matches_x_steps(x_steps).then_some(CricutModel::Maker1)
+    }
+
+    /// Whether a machine reporting `x_steps` could be this model.
+    pub fn matches_x_steps(self, x_steps: f64) -> bool {
+        (x_steps - self.x_steps()).abs() < 0.05
+    }
+
+    /// How far either side of each box line the mark scans look: the
+    /// original Maker's sheet lands further from where it should be.
+    pub fn scan_reach(self) -> f64 {
+        match self {
+            CricutModel::Maker1 => 20.0,
+            _ => SCAN_REACH,
         }
     }
 
@@ -251,6 +290,7 @@ impl CricutModel {
         match self {
             CricutModel::Maker3 => maker3_reach(tool),
             CricutModel::Explore3 => explore3_reach(tool),
+            CricutModel::Maker1 => maker1_reach(tool),
         }
     }
 
@@ -260,6 +300,7 @@ impl CricutModel {
         match self {
             CricutModel::Maker3 => SENSOR_OFFSET,
             CricutModel::Explore3 => EXPLORE3_SENSOR_OFFSET,
+            CricutModel::Maker1 => MAKER1_SENSOR_OFFSET,
         }
     }
 
@@ -269,13 +310,14 @@ impl CricutModel {
         match self {
             CricutModel::Maker3 => SENSOR_X_MAX,
             CricutModel::Explore3 => 335.0 - EXPLORE3_SENSOR_OFFSET.0,
+            CricutModel::Maker1 => 340.0 - MAKER1_SENSOR_OFFSET.0,
         }
     }
 
     /// The lowest height for holder 0 (A) or 1 (B).
     pub fn z_min(self, holder: u8) -> f64 {
         match self {
-            CricutModel::Maker3 => maker3_z_min(holder),
+            CricutModel::Maker3 | CricutModel::Maker1 => maker3_z_min(holder),
             // the firmware stops the clamps there, without telling Grbl
             CricutModel::Explore3 => -8.5,
         }
@@ -283,7 +325,7 @@ impl CricutModel {
 
     /// Holder B takes drive-housing tools, scanned with M3.
     pub fn drive_tools(self) -> bool {
-        self == CricutModel::Maker3
+        self != CricutModel::Explore3
     }
 
     /// The registration sensor works (`#YE`), for Print & Cut: on both.
@@ -291,14 +333,21 @@ impl CricutModel {
         true
     }
 
-    /// Homes itself at power-on; the Explore 3 needs `$H` first.
+    /// Homes itself at power-on: all of them now (the Explore 3 from its
+    /// v45 firmware).
     pub fn homes_at_power_on(self) -> bool {
-        self == CricutModel::Maker3
+        true
+    }
+
+    /// Homes fully at the start of every job: the Explore 3's clamps are open
+    /// loop steppers that lose steps without an alarm.
+    pub fn homes_every_job(self) -> bool {
+        self == CricutModel::Explore3
     }
 
     pub fn load_tool(self) -> &'static [&'static str] {
         match self {
-            CricutModel::Maker3 => &MAKER3_LOAD_TOOL,
+            CricutModel::Maker3 | CricutModel::Maker1 => &MAKER3_LOAD_TOOL,
             CricutModel::Explore3 => &EXPLORE3_LOAD_TOOL,
         }
     }
@@ -352,6 +401,16 @@ pub const MAKER3_DETECT_TOOL: [&str; 14] = ["G90 G21", "T0", "G1 Z0 F300", "T1",
 /// mat's left edge), the blade -37.6 to 297.4 (the firmware shifts clamp B's
 /// coordinates by the 37.6 mm between the clamps). Tool unknown: where both
 /// can go.
+/// The original Maker's X reach: the pen 0 to 340, the blade -39.5 to 300.5
+/// (the firmware shifts holder B's coordinates by 39.5 mm).
+pub fn maker1_reach(tool: Option<u8>) -> (f64, f64) {
+    match tool {
+        Some(0) => (0.0, 340.0),
+        Some(_) => (-39.5, 300.5),
+        None => (0.0, 300.5),
+    }
+}
+
 pub fn explore3_reach(tool: Option<u8>) -> (f64, f64) {
     match tool {
         Some(0) => (0.0, 335.0),
@@ -535,6 +594,12 @@ impl Maker3Options {
     /// -4.5, and the fine-point blade cut copy paper cleanly at -8.
     pub fn explore3() -> Self {
         Maker3Options { pen_z: -4.5, blade_z: -8.0, model: CricutModel::Explore3, ..Default::default() }
+    }
+
+    /// Starting settings for the original Maker: its pen touched at -8 and
+    /// drew at -9; the fine-point blade cut through from -8.5 (-9 used).
+    pub fn maker1() -> Self {
+        Maker3Options { pen_z: -9.0, blade_z: -9.0, model: CricutModel::Maker1, ..Default::default() }
     }
 
     /// The work area for the page's mat on this machine: (width, length) mm.
@@ -737,7 +802,7 @@ pub fn encode_maker3(job: &CutJob, bed: (f64, f64), o: &Maker3Options) -> Result
 pub fn encode_maker3_mapped(job: &CutJob, bed: (f64, f64), o: &Maker3Options, map: &dyn Fn(Point) -> Point) -> Result<Vec<String>, String> {
     // the Explore 3 doesn't home at power-on, and its clamps lose steps
     // silently: it homes for every job
-    let home = if o.model.homes_at_power_on() { "$HZ" } else { "$H" };
+    let home = if o.model.homes_every_job() { "$H" } else { "$HZ" };
     let mut g = vec![home.to_string(), "G90 G21".into()];
     let mut cur: Option<Maker3Tool> = None;
     let mut steering = false;
@@ -941,6 +1006,8 @@ pub const SENSOR_OFFSET: (f64, f64) = (16.1, 2.0);
 pub const SENSOR_X_MAX: f64 = 323.9;
 /// The Explore 3's sensor (a different chip) sits here from the pen.
 pub const EXPLORE3_SENSOR_OFFSET: (f64, f64) = (22.04, -0.83);
+/// The original Maker's sensor (the Explore 3's chip, on its own carriage).
+pub const MAKER1_SENSOR_OFFSET: (f64, f64) = (16.53, 2.24);
 /// Scans start this far outside a side of the box, and end this far inside.
 const SCAN_REACH: f64 = 12.0;
 /// The scan back out starts this far inside where the first scan found it.
@@ -1026,7 +1093,7 @@ impl Crossing {
     /// was, so starting there keeps those trips short (otherwise the carriage
     /// goes all the way back to wherever it was, often home, every scan).
     pub fn premove(&self) -> String {
-        let start = self.nominal + SCAN_REACH * self.outside;
+        let start = self.nominal + self.model.scan_reach() * self.outside;
         let (x, y) = if self.axis == 0 { (start, self.along) } else { (self.along, start) };
         let s = self.model.sensor_offset();
         format!("G1 X{} Y{} F{}", num(x + s.0), num(y + s.1), num(TRAVEL_FEED))
@@ -1034,12 +1101,13 @@ impl Crossing {
 
     /// Scan inwards from outside, so the first dark band is the box.
     pub fn inward(&self) -> Result<MarkScan, String> {
-        MarkScan::new(self.model, self.axis, self.nominal + SCAN_REACH * self.outside, self.nominal - SCAN_REACH * self.outside)
+        let r = self.model.scan_reach();
+        MarkScan::new(self.model, self.axis, self.nominal + r * self.outside, self.nominal - r * self.outside)
     }
 
     /// Scan back out, starting just inside where the first scan found it.
     pub fn outward(&self, found: f64) -> Result<MarkScan, String> {
-        MarkScan::new(self.model, self.axis, found - SCAN_BACK * self.outside, self.nominal + SCAN_REACH * self.outside)
+        MarkScan::new(self.model, self.axis, found - SCAN_BACK * self.outside, self.nominal + self.model.scan_reach() * self.outside)
     }
 
     /// The measured point on the side, in pen coordinates.
@@ -1382,6 +1450,9 @@ pub struct GrblState {
     /// Maker 3: the holder to select when the tool isn't known (on connecting,
     /// or after a restart).
     pub preferred_tool: u8,
+    /// The X steps/mm the controller reported (`$100`, from `$$`): tells the
+    /// Cricut models apart.
+    pub x_steps: Option<f64>,
     pub error: Option<String>,
     /// The conversation, newest last (sent lines start with "> ").
     pub log: VecDeque<String>,
@@ -2243,6 +2314,11 @@ impl Worker {
             return Ok(());
         }
         log(&self.state, line.to_string());
+        if let Some(v) = line.strip_prefix("$100=").and_then(|v| v.trim().parse::<f64>().ok()) {
+            if let Ok(mut s) = self.state.lock() {
+                s.x_steps = Some(v);
+            }
+        }
         if let Some(rest) = line.strip_prefix("[MSG:Tool ") {
             // what the scan of holder B found
             let name = rest.split(',').next().unwrap_or("").trim_end_matches(']').trim().to_string();

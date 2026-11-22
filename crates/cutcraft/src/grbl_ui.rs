@@ -92,7 +92,7 @@ pub fn section(app: &mut App, ui: &mut Ui) {
         None => {
             ui.small(if maker3 {
                 if model == Some(grbl::CricutModel::Explore3) {
-                    "Hold the machine's Power button (1 s with the newer bootloader, 3 s with the older), then ⟳ and Connect. The port only exists once the machine is on. CutCraft homes it when it connects: it doesn't home itself."
+                    "Hold the machine's Power button (1 s with the newer bootloader, 3 s with the older) and let it home, then ⟳ and Connect. The port only exists once the machine is on."
                 } else {
                     "Hold the machine's Power button for 3 s and let it home, then ⟳ and Connect. The port only exists once the machine is on."
                 }
@@ -163,6 +163,10 @@ fn open_link(app: &mut App) {
     // the Explore 3 doesn't home at power-on, and ignores Z until it has
     if grbl::cricut_model(&app.doc.machine).is_some_and(|m| !m.homes_at_power_on()) {
         link.home_first();
+    }
+    // the Cricuts share a USB ID: their X steps ($100) tell them apart
+    if grbl::is_maker3(&app.doc.machine) {
+        link.send("$$");
     }
     app.ps.x.grbl = Some(link);
     let _ = app.prefs.save();
@@ -460,6 +464,30 @@ fn maker3_controls(app: &mut App, ui: &mut Ui, link: &GrblLink, st: &grbl::GrblS
     let send_all = |lines: Vec<String>| lines.iter().for_each(|l| link.send(l));
     if st.needs_home {
         ui.colored_label(Color32::from_rgb(230, 170, 50), "Home the machine before the next job: its position can't be trusted after a stop or alarm.");
+    }
+    // the chosen model, against what the machine says it is
+    if let (Some(chosen), Some(steps)) = (grbl::cricut_model(&app.doc.machine), st.x_steps) {
+        if !chosen.matches_x_steps(steps) {
+            let actual = grbl::CricutModel::from_x_steps(steps);
+            let what = match actual {
+                Some(m) => format!("an original {}", m.label()),
+                None if (steps - 8.977).abs() < 0.05 => "a Cricut Maker 3 or Explore 3".to_string(),
+                None => format!("a different machine (X {steps} steps/mm)"),
+            };
+            ui.colored_label(Color32::from_rgb(230, 80, 80), format!("This machine looks like {what}, but {} is chosen. Its limits and heights would be wrong: pick the right machine before cutting.", chosen.label()));
+            if let Some(m) = actual {
+                let id = match m {
+                    grbl::CricutModel::Maker1 => grbl::MAKER1_ID,
+                    grbl::CricutModel::Maker3 => grbl::MAKER3_ID,
+                    grbl::CricutModel::Explore3 => grbl::EXPLORE3_ID,
+                };
+                if ui.button(format!("Switch to {}", m.label())).clicked() {
+                    app.checkpoint();
+                    app.doc.machine = id.to_string();
+                    app.prefs.default_machine = id.to_string();
+                }
+            }
+        }
     }
     ui.horizontal_wrapped(|ui| {
         if ui.add_enabled(!running && (idle || st.alarm()), egui::Button::new("⌂ Home")).on_hover_text("Lifts both tools and finds the end of X ($H). The mat's Y position isn't homed.").clicked() {
