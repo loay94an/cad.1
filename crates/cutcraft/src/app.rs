@@ -1,5 +1,8 @@
 //! Application state, actions, menus and keyboard shortcuts.
 
+#[cfg(target_os = "android")]
+use crate::android_rfd as rfd;
+
 use crate::canvas::{CanvasState, View};
 use crate::panels::{Panel, PanelState};
 use crate::render::RenderCache;
