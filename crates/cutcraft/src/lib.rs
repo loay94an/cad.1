@@ -1,6 +1,8 @@
 #![cfg(target_os = "android")]
 
 mod app;
+#[cfg(target_os = "android")]
+mod android_rfd;
 mod browser;
 mod calibrate;
 mod canvas;
