@@ -59,6 +59,4 @@ min_sdk_version = 26
 
 [target.'cfg(not(target_os = "android"))'.dependencies]
 rfd = "0.17.2"
-
-[target.'cfg(not(target_os = "android"))'.dependencies]
 trash = "5.2.9"
