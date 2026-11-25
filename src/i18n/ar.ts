@@ -595,6 +595,11 @@ const translations: Record<string, string> = {
   '+ Fuse box': '+ لوحة قواطع',
   'Module': 'وحدة',
   'module': 'وحدة',
+  'Floor with at least the usable headroom': 'مساحة الأرضية التي يتوفر لها الارتفاع الصافي المطلوب للاستخدام على الأقل',
+  'Perimeter minus doors and openings to the floor': 'المحيط بعد طرح الأبواب والفتحات التي تصل إلى الأرضية',
+  'Wall area up to the ceiling, before doors and windows': 'مساحة الجدران حتى السقف قبل خصم الأبواب والنوافذ',
+  'Wall area minus doors and windows: what you paint': 'مساحة الجدران بعد خصم الأبواب والنوافذ: المساحة المطلوب طلاؤها',
+  'Sloped ceilings counted at their real (tilted) size': 'تُحتسب الأسقف المائلة بمساحتها الفعلية على سطح الميل',
 };
 
 const attributes = ['title', 'aria-label', 'placeholder', 'alt'];
@@ -680,6 +685,7 @@ function translateText(value: string): string {
     [/^C(\d+) side$/, (m) => `جهة C${m[1]}`],
     [/^(.+) · changed (.+)$/, (m) => `${m[1]} · تم التعديل ${m[2]}`],
     [/^(\d+) modules?$/, (m) => `${m[1]} ${m[1] === '1' ? 'وحدة' : 'وحدات'}`],
+    [/^(.+) – eendraadschema$/, (m) => `${m[1]} – المخطط الكهربائي أحادي الخط`],
   ];
   for (const [pattern, render] of rules) {
     const match = translated.trim().match(pattern);
