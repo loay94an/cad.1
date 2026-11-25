@@ -4,7 +4,8 @@ set -euo pipefail
 RES="android/app/src/main/res"
 mkdir -p "$RES/drawable" "$RES/mipmap-anydpi-v26" "$RES/values"
 
-cat > "$RES/values/ic_launcher_colors.xml" <<'XML'
+# Capacitor creates this color resource; replace it instead of defining a duplicate.
+cat > "$RES/values/ic_launcher_background.xml" <<'XML'
 <resources>
     <color name="ic_launcher_background">#061B3D</color>
 </resources>
