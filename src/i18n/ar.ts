@@ -522,8 +522,7 @@ function translateText(value: string): string {
     [/^Delete "(.+)" (.+)\\? Export it first if you want to keep a copy\\.$/, (m) => `حذف «${m[1]}» ${m[2]}؟ صدّر المخطط أولاً إذا أردت الاحتفاظ بنسخة.`],
     [/^\\d+ walls?$/, (m) => m[0].replace('walls','جدران').replace('wall','جدار')],
 
-    [/^Delete "(.+)" with all its rooms\\?$/, (m) => `حذف «${m[1]}» مع جميع غرفه؟`],
-    [/^Delete "(.+)" with all its rooms\\?$/, (m) => `حذف «${m[1]}» مع جميع غرفه؟`],
+    [/^Delete "(.+)" with all its rooms/, (m) => `حذف «${m[1]}» مع جميع غرفه؟`],
   ];
   for (const [pattern, render] of rules) {
     const match = translated.trim().match(pattern);
