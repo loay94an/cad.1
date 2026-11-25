@@ -20,7 +20,7 @@ const error = ref('');
 const message = ref('');
 const name = ref('');
 
-const when = (iso: string) => new Date(iso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+const when = (iso: string) => new Date(iso).toLocaleString('ar', { dateStyle: 'medium', timeStyle: 'short' });
 
 async function refresh() {
   try {
