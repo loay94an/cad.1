@@ -624,7 +624,7 @@ const translations: Record<string, string> = {
   'single-line diagram': 'المخطط الكهربائي أحادي الخط',
   'The drawing could not be turned into a picture.': 'تعذر تحويل الرسم إلى صورة.',
   'The picture could not be saved.': 'تعذر حفظ الصورة.',
-  'The plan doesn't fit on': 'لا يتناسب المخطط مع الورق المحدد',
+  "The plan doesn't fit on": 'لا يتناسب المخطط مع الورق المحدد',
   'Project file saved': 'تم حفظ ملف المشروع',
   'Keep it somewhere safe; you can import it again later.': 'احتفظ به في مكان آمن؛ يمكنك استيراده مجدداً لاحقاً.',
 };
