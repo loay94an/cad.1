@@ -629,7 +629,7 @@ const translations: Record<string, string> = {
   'Keep it somewhere safe; you can import it again later.': 'احتفظ به في مكان آمن؛ يمكنك استيراده مجدداً لاحقاً.',
 };
 
-const attributes = ['title', 'aria-label', 'placeholder', 'alt'];
+const attributes = ['title', 'aria-label', 'aria-description', 'placeholder', 'alt', 'data-tooltip'];
 
 function translateText(value: string): string {
   const trimmed = value.trim();
@@ -784,7 +784,7 @@ export function installArabicUi() {
   const nativePrompt = window.prompt.bind(window);
   window.alert = (message?: unknown) => nativeAlert(translateText(String(message ?? '')));
   window.confirm = (message?: unknown) => nativeConfirm(translateText(String(message ?? '')));
-  window.prompt = (message?: string, defaultValue?: string) => nativePrompt(translateText(String(message ?? '')), defaultValue);
+  window.prompt = (message?: string, defaultValue?: string) => nativePrompt(translateText(String(message ?? '')), defaultValue === undefined ? undefined : translateText(defaultValue));
 
   const observer = new MutationObserver((records) => {
     for (const record of records) {
