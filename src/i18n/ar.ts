@@ -678,13 +678,13 @@ function translateText(value: string): string {
     [/^3D is not available in this browser.*$/, () => 'العرض ثلاثي الأبعاد غير متاح في هذا المتصفح.'],
     [/^\d+ point\(s\) on the plan are on this circuit\. Remove it anyway\?$/, (m) => `توجد نقاط مرتبطة بهذه الدائرة في المخطط. هل تريد إزالتها رغم ذلك؟`],
 
-    [/^Angle at (C\\d+)( \\(guess\\))?$/, (m) => `الزاوية عند ${m[1]}${m[2] ? ' (تقديرية)' : ''}`],
+    [/^Angle at (C\d+)( \(guess\))?$/, (m) => `الزاوية عند ${m[1]}${m[2] ? ' (تقديرية)' : ''}`],
     [/^Editing: (.+)$/, (m) => `تحرير: ${translateText(m[1])}`],
-    [/^Add a device to row (\\d+)$/, (m) => `إضافة جهاز إلى الصف ${m[1]}`],
-    [/^Add a device \\(the rail is full\\)$/, () => 'إضافة جهاز (الصف ممتلئ)'],
+    [/^Add a device to row (\d+)$/, (m) => `إضافة جهاز إلى الصف ${m[1]}`],
+    [/^Add a device \(the rail is full\)$/, () => 'إضافة جهاز (الصف ممتلئ)'],
     [/^Delete this (pipe|duct)$/, (m) => `حذف ${m[1] === 'pipe' ? 'هذا الأنبوب' : 'مجرى الهواء هذا'}`],
     [/^Draw a (pipe|duct): (.+)$/, (m) => `ارسم ${m[1] === 'pipe' ? 'أنبوباً' : 'مجرى هواء'}: ${translateText(m[2])}`],
-    [/^(Wall height|Floor level|Length|Width) \\((.+)\\)$/, (m) => `${({ 'Wall height':'ارتفاع الجدار', 'Floor level':'منسوب الأرضية', Length:'الطول', Width:'العرض' } as Record<string,string>)[m[1]]} (${m[2]})`],
+    [/^(Wall height|Floor level|Length|Width) \((.+)\)$/, (m) => `${({ 'Wall height':'ارتفاع الجدار', 'Floor level':'منسوب الأرضية', Length:'الطول', Width:'العرض' } as Record<string,string>)[m[1]]} (${m[2]})`],
   ];
   for (const [pattern, render] of rules) {
     const match = translated.trim().match(pattern);
