@@ -2157,3 +2157,48 @@ table.qty.small {
 .order-buttons .btn {
   flex: 1;
 }
+
+
+/* ---- Arabic RTL + Android touch ergonomics ---- */
+:root { color-scheme: light; }
+html[dir='rtl'] body,
+html[dir='rtl'] button,
+html[dir='rtl'] input,
+html[dir='rtl'] select,
+html[dir='rtl'] textarea { font-family: system-ui, -apple-system, 'Noto Sans Arabic', 'Noto Naskh Arabic', sans-serif; }
+html[dir='rtl'] body { direction: rtl; }
+html[dir='rtl'] .app-screen { direction: rtl; }
+html[dir='rtl'] .page,
+html[dir='rtl'] .dialog,
+html[dir='rtl'] .panel,
+html[dir='rtl'] .modal { text-align: start; }
+html[dir='rtl'] input,
+html[dir='rtl'] textarea,
+html[dir='rtl'] select { text-align: start; }
+html[dir='rtl'] input[type='number'],
+html[dir='rtl'] input[type='date'],
+html[dir='rtl'] input[type='time'],
+html[dir='rtl'] input[type='color'],
+html[dir='rtl'] .numeric,
+html[dir='rtl'] .measure-read { direction: ltr; unicode-bidi: plaintext; }
+html, body, #app { min-height: 100%; }
+body { overscroll-behavior: none; }
+button, [role='button'], input, select, textarea { touch-action: manipulation; }
+button, .btn, .icon-btn { min-height: 40px; }
+input, select, textarea { font-size: max(16px, 1rem); }
+canvas, .floor-canvas, .plan3d-host { -webkit-user-select: none; user-select: none; }
+.floor-canvas, .plan3d-host { touch-action: none; }
+* { -webkit-tap-highlight-color: transparent; }
+@media (max-width: 700px) {
+  .page { padding-inline: max(10px, env(safe-area-inset-left)); padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+  .topbar { padding-inline: 12px; }
+  .row-actions { flex-wrap: wrap; gap: 8px; }
+  .row-actions > .btn { flex: 1 1 auto; }
+  .dialog, .modal, .panel-dialog { max-width: calc(100vw - 16px); }
+  .export-pick { flex-direction: column; }
+  .export-preview { max-width: 100%; width: 100%; }
+  .plan3d-host { min-height: 45vh; }
+}
+@media (pointer: coarse) {
+  button, .btn, .icon-btn, .tool-button, .dock button { min-width: 40px; min-height: 44px; }
+}
