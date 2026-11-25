@@ -311,7 +311,7 @@ const translations: Record<string, string> = {
   "New": "جديد",
   "To demolish": "للهدم",
   "Load-bearing": "حامل للأحمال",
-  "Copy W1, W2 to W3, W4": "نسخ W1 وW2 إلى W3 وW4",,
+  "Copy W1, W2 to W3, W4": "نسخ W1 وW2 إلى W3 وW4",
 
   'Menu': 'القائمة',
   'Undo (Ctrl+Z)': 'تراجع (Ctrl+Z)',
@@ -549,7 +549,7 @@ const translations: Record<string, string> = {
   'Not available': 'غير متاح',
   'New points go on circuit': 'تُضاف النقاط الجديدة إلى الدائرة',
   'Label': 'التسمية',
-  'e.g. Kitchen sockets': 'مثال: مقابس المطبخ',,
+  'e.g. Kitchen sockets': 'مثال: مقابس المطبخ',
   'View & notes': 'العرض والملاحظات',
   'Double bed': 'سرير مزدوج',
   'Single bed': 'سرير مفرد',
