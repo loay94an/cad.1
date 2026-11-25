@@ -1,4 +1,5 @@
 const translations: Record<string, string> = {
+  "”": "»",
   "✎ Edit": "✎ تحرير",
   "parts": "أجزاء",
   ") · read-only": ") · للقراءة فقط",
