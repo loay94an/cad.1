@@ -1,0 +1,7 @@
+# Keep local builds and dependencies out of the image build.
+**/bin
+**/obj
+**/node_modules
+dist
+server/Floorplan.Api/data
+.git

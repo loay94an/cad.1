@@ -1,0 +1,37 @@
+# Floor plan with your own OIDC provider. Copy the values into a .env file next to this one
+# (or set them in your shell), then: docker compose up -d --build
+# Details: server/README.md
+services:
+  floorplan:
+    build:
+      context: .
+    image: floorplan:latest
+    restart: unless-stopped
+    ports:
+      - "${FLOORPLAN_PORT:-8080}:8080"
+    volumes:
+      - floorplan-data:/data
+      # - ./certs:/certs:ro   # e.g. OIDC_DECRYPTION_CERT=/certs/encryption.pfx
+    environment:
+      DataDir: /data
+      # Issuer URL of the provider, e.g.
+      #   Authentik: https://auth.example.com/application/o/floorplan/
+      #   Keycloak:  https://sso.example.com/realms/home
+      Oidc__Authority: ${OIDC_AUTHORITY:?set OIDC_AUTHORITY}
+      # Public client (Authorization Code + PKCE) the PWA signs in with.
+      Oidc__ClientId: ${OIDC_CLIENT_ID:?set OIDC_CLIENT_ID}
+      # Expected "aud" of access tokens. Empty = the client id.
+      Oidc__Audience: ${OIDC_AUDIENCE:-}
+      # Add offline_access on Authentik, so it gives refresh tokens and you stay signed in.
+      Oidc__Scopes: ${OIDC_SCOPES:-openid profile email}
+      # Set to false only if the provider's access tokens carry no usable "aud".
+      Oidc__ValidateAudience: ${OIDC_VALIDATE_AUDIENCE:-true}
+      # Optional, for providers that encrypt access tokens (OpenIddict). Without these the API checks
+      # such tokens at the provider's userinfo endpoint. With the encryption certificate (.pfx with
+      # private key, mounted below) or the base64 symmetric key it reads them itself.
+      Oidc__TokenDecryptionCert__Path: ${OIDC_DECRYPTION_CERT:-}
+      Oidc__TokenDecryptionCert__Password: ${OIDC_DECRYPTION_CERT_PASSWORD:-}
+      Oidc__TokenDecryptionKey: ${OIDC_DECRYPTION_KEY:-}
+
+volumes:
+  floorplan-data:

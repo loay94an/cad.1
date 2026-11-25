@@ -1,7 +1,0 @@
-﻿[workspace]
-resolver = "2"
-members = ["crates/cutcraft-core", "crates/cutcraft", "crates/fcmlib"]
-
-[profile.dev.package."*"]
-opt-level = 2
-

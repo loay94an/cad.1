@@ -1,0 +1,965 @@
+{
+  "format": "floorplan-project",
+  "schemaVersion": 1,
+  "id": "cc2eb6811f60d2e7983527a5513fd418",
+  "name": "Rue des Tilleuls 12",
+  "createdAt": "2026-11-18T07:23:59.379Z",
+  "updatedAt": "2026-11-18T07:23:59.379Z",
+  "settings": {
+    "unit": "m",
+    "defaultThickness_mm": 100,
+    "defaultHeight_mm": 2600,
+    "view": {
+      "grid": true,
+      "dimensions": true,
+      "names": true,
+      "angles": false,
+      "notes": true,
+      "furniture": true,
+      "installations": true,
+      "utilities": true,
+      "below": false,
+      "above": false,
+      "finishes": true
+    }
+  },
+  "floors": [
+    {
+      "id": "525fae9e16597053145053d234482f44",
+      "name": "Ground floor",
+      "level": 0,
+      "rooms": [
+        {
+          "id": "8550f32267a80998185bb2628e3e46fa",
+          "name": "Living",
+          "origin": {
+            "x": 0,
+            "y": 0
+          },
+          "rotation_deg": 0,
+          "walls": [
+            {
+              "id": "09b9d6ca6b0557bc7e8d7749b0343e3d",
+              "length_mm": 6000,
+              "angle_deg": 90,
+              "thickness_mm": 300,
+              "kind": "exterior"
+            },
+            {
+              "id": "b0c6193c18316ef34e3921532ed4f509",
+              "length_mm": 4500,
+              "angle_deg": 90,
+              "thickness_mm": 100,
+              "status": "demolish"
+            },
+            {
+              "id": "911995eb29faa56a96efb08cf220983d",
+              "length_mm": 6000,
+              "angle_deg": 90,
+              "thickness_mm": 100,
+              "loadBearing": true
+            },
+            {
+              "id": "03e5afc9b21f15d4d7d152b560ac5376",
+              "length_mm": 4500,
+              "angle_deg": 90,
+              "thickness_mm": 300,
+              "kind": "exterior"
+            }
+          ],
+          "diagonals": [],
+          "height_mm": 2600,
+          "finish": {
+            "floor": "parquet",
+            "walls": "paint, off-white"
+          },
+          "furniture": [
+            {
+              "id": "0b0f859d9d1fa4b95f2558c62ea3fcd9",
+              "name": "Sofa",
+              "kind": "sofa",
+              "shape": "rect",
+              "x_mm": 3000,
+              "y_mm": 3800,
+              "width_mm": 2400,
+              "depth_mm": 900,
+              "rotation_deg": 180
+            },
+            {
+              "id": "74be2b55fd7f9a78970f2c37c2c88a41",
+              "name": "Armchair",
+              "kind": "armchair",
+              "shape": "rect",
+              "x_mm": 4900,
+              "y_mm": 2600,
+              "width_mm": 850,
+              "depth_mm": 850,
+              "rotation_deg": 270
+            },
+            {
+              "id": "e8ba20d72b108bcdff7cc7523742c0cc",
+              "name": "Coffee table",
+              "kind": "table-round",
+              "shape": "round",
+              "x_mm": 3000,
+              "y_mm": 3050,
+              "width_mm": 700,
+              "depth_mm": 700,
+              "rotation_deg": 0
+            },
+            {
+              "id": "350cf5705d5e881954cbccda5fa96f85",
+              "name": "TV unit",
+              "kind": "cabinet",
+              "shape": "rect",
+              "x_mm": 3000,
+              "y_mm": 300,
+              "width_mm": 1800,
+              "depth_mm": 400,
+              "rotation_deg": 0
+            }
+          ],
+          "stairs": [
+            {
+              "id": "8fd5d018e9a9c38d9b6b5dabddb15275",
+              "kind": "stairs",
+              "name": "Stairs",
+              "x_mm": 600,
+              "y_mm": 2600,
+              "width_mm": 900,
+              "length_mm": 3200,
+              "rotation_deg": 270,
+              "rise_mm": 2700,
+              "steps": 15
+            }
+          ],
+          "pins": [
+            {
+              "id": "d41fa86ef86b50358f3303e0bced14e2",
+              "x_mm": 5200,
+              "y_mm": 700,
+              "title": "Damp patch",
+              "text": "Check after the winter",
+              "createdAt": "2026-11-18T07:23:59.382Z"
+            }
+          ]
+        },
+        {
+          "id": "11aa915dfe8a23c77b6ed8a994ecec8a",
+          "name": "Kitchen",
+          "origin": {
+            "x": 6100,
+            "y": 0
+          },
+          "rotation_deg": 0,
+          "walls": [
+            {
+              "id": "12170d9af8eecd5cbe832c5524e8a489",
+              "length_mm": 4000,
+              "angle_deg": 90,
+              "thickness_mm": 300,
+              "kind": "exterior"
+            },
+            {
+              "id": "44156783d12c52d9e534edcdf9060315",
+              "length_mm": 4500,
+              "angle_deg": 90,
+              "thickness_mm": 300,
+              "kind": "exterior"
+            },
+            {
+              "id": "0c4115eb931e3c4cb6dbdcbe1fe086d9",
+              "length_mm": 4000,
+              "angle_deg": 90,
+              "thickness_mm": 100
+            },
+            {
+              "id": "850fdfb402bb7e591612d00863b909d9",
+              "length_mm": 4500,
+              "angle_deg": 90,
+              "thickness_mm": 100,
+              "status": "demolish"
+            }
+          ],
+          "diagonals": [],
+          "height_mm": 2600,
+          "finish": {
+            "floor": "tiles",
+            "walls": "tiles behind the counter"
+          },
+          "furniture": [
+            {
+              "id": "55fd24e49137f5b345489562b67b0de7",
+              "name": "Kitchen counter",
+              "kind": "counter",
+              "shape": "rect",
+              "x_mm": 1800,
+              "y_mm": 300,
+              "width_mm": 3200,
+              "depth_mm": 600,
+              "rotation_deg": 0
+            },
+            {
+              "id": "3f6dcdfb090d3a4f14de63e42cfee6d1",
+              "name": "Fridge",
+              "kind": "fridge",
+              "shape": "rect",
+              "x_mm": 3600,
+              "y_mm": 1200,
+              "width_mm": 600,
+              "depth_mm": 650,
+              "rotation_deg": 90
+            },
+            {
+              "id": "eaa566e62fc44aa5c8740a5bfcccf069",
+              "name": "Dining table",
+              "kind": "table",
+              "shape": "rect",
+              "x_mm": 1800,
+              "y_mm": 3300,
+              "width_mm": 1600,
+              "depth_mm": 900,
+              "rotation_deg": 0
+            }
+          ]
+        },
+        {
+          "id": "4bbb0b32796b25deb52db910059f101c",
+          "name": "Hall",
+          "origin": {
+            "x": 0,
+            "y": 4600
+          },
+          "rotation_deg": 0,
+          "walls": [
+            {
+              "id": "20ea6ec9628feb9c9ae4865d954fb58a",
+              "length_mm": 2400,
+              "angle_deg": 90,
+              "thickness_mm": 100,
+              "loadBearing": true
+            },
+            {
+              "id": "c2bd5b604e14a02f1afa0fe4e671707a",
+              "length_mm": 2500,
+              "angle_deg": 90,
+              "thickness_mm": 100
+            },
+            {
+              "id": "6054fb66e6fe9c260d6c6a4fd76c0c74",
+              "length_mm": 2400,
+              "angle_deg": 90,
+              "thickness_mm": 300,
+              "kind": "exterior"
+            },
+            {
+              "id": "88046f40da2c2c1b512a984c88ca1d75",
+              "length_mm": 2500,
+              "angle_deg": 90,
+              "thickness_mm": 300,
+              "kind": "exterior"
+            }
+          ],
+          "diagonals": [],
+          "height_mm": 2600,
+          "finish": {
+            "floor": "tiles"
+          }
+        },
+        {
+          "id": "d91bb7a0ff0ada18cb60f16ea09e6ebc",
+          "name": "Bathroom",
+          "origin": {
+            "x": 2500,
+            "y": 4600
+          },
+          "rotation_deg": 0,
+          "walls": [
+            {
+              "id": "08eb277f0578898423af9eed0cebb81f",
+              "length_mm": 2400,
+              "angle_deg": 90,
+              "thickness_mm": 100
+            },
+            {
+              "id": "3abc312a8d65da8e9b0cc96d26404412",
+              "length_mm": 2500,
+              "angle_deg": 90,
+              "thickness_mm": 100,
+              "status": "new"
+            },
+            {
+              "id": "28083d0c440d0cc4509d024445384876",
+              "length_mm": 2400,
+              "angle_deg": 90,
+              "thickness_mm": 300,
+              "kind": "exterior"
+            },
+            {
+              "id": "fa1e6ed3d0a7d6e28b3d24495b03d39e",
+              "length_mm": 2500,
+              "angle_deg": 90,
+              "thickness_mm": 100
+            }
+          ],
+          "diagonals": [],
+          "height_mm": 2600,
+          "finish": {
+            "floor": "tiles",
+            "walls": "tiles to 1.2 m",
+            "skirting": false
+          },
+          "furniture": [
+            {
+              "id": "84ed448aca0f56c2d52d9b875076891e",
+              "name": "Bathtub",
+              "kind": "bathtub",
+              "shape": "rect",
+              "x_mm": 1200,
+              "y_mm": 2050,
+              "width_mm": 1700,
+              "depth_mm": 750,
+              "rotation_deg": 0
+            },
+            {
+              "id": "a545a8821b8b71f2b1d6464d74c44e05",
+              "name": "Toilet",
+              "kind": "toilet",
+              "shape": "rect",
+              "x_mm": 300,
+              "y_mm": 400,
+              "width_mm": 400,
+              "depth_mm": 650,
+              "rotation_deg": 90
+            },
+            {
+              "id": "1e1a567282e01fe4eba75efd0965f68d",
+              "name": "Sink",
+              "kind": "sink",
+              "shape": "rect",
+              "x_mm": 1700,
+              "y_mm": 230,
+              "width_mm": 600,
+              "depth_mm": 450,
+              "rotation_deg": 0
+            }
+          ]
+        },
+        {
+          "id": "6f9be9d265e9e7b5c08ce93a569223a7",
+          "name": "Bedroom",
+          "origin": {
+            "x": 5000,
+            "y": 4600
+          },
+          "rotation_deg": 0,
+          "walls": [
+            {
+              "id": "d21dd23d7dbf943f67cd35016493a9ab",
+              "length_mm": 5100,
+              "angle_deg": 90,
+              "thickness_mm": 100
+            },
+            {
+              "id": "8bf3fc9402bcbfe4f9d376fddfe484ae",
+              "length_mm": 2500,
+              "angle_deg": 90,
+              "thickness_mm": 300,
+              "kind": "exterior"
+            },
+            {
+              "id": "3d2b5eae66de24f9e518f0f64dfd75a9",
+              "length_mm": 5100,
+              "angle_deg": 90,
+              "thickness_mm": 300,
+              "kind": "exterior"
+            },
+            {
+              "id": "01b1b4b1552b7e56c1f87b90d8397a16",
+              "length_mm": 2500,
+              "angle_deg": 90,
+              "thickness_mm": 100,
+              "status": "new"
+            }
+          ],
+          "diagonals": [],
+          "height_mm": 2600,
+          "finish": {
+            "floor": "carpet"
+          },
+          "furniture": [
+            {
+              "id": "97e34530d6a15dbfe539056ef010992f",
+              "name": "Double bed",
+              "kind": "bed-double",
+              "shape": "rect",
+              "x_mm": 1100,
+              "y_mm": 1250,
+              "width_mm": 1600,
+              "depth_mm": 2000,
+              "rotation_deg": 90
+            },
+            {
+              "id": "634e356ee213186b7342f36a342b9ebe",
+              "name": "Wardrobe",
+              "kind": "wardrobe",
+              "shape": "rect",
+              "x_mm": 4750,
+              "y_mm": 1250,
+              "width_mm": 1800,
+              "depth_mm": 600,
+              "rotation_deg": 90
+            }
+          ]
+        }
+      ],
+      "openings": [
+        {
+          "id": "2057e7c9f1dab3f6f825aedf6b732d51",
+          "roomId": "8550f32267a80998185bb2628e3e46fa",
+          "wallIndex": 0,
+          "offset_mm": 800,
+          "width_mm": 1800,
+          "height_mm": 1500,
+          "sill_mm": 800,
+          "type": "window"
+        },
+        {
+          "id": "a1e4e756fc79ac06fbb55c66a6a9e319",
+          "roomId": "8550f32267a80998185bb2628e3e46fa",
+          "wallIndex": 0,
+          "offset_mm": 3600,
+          "width_mm": 1800,
+          "height_mm": 1500,
+          "sill_mm": 800,
+          "type": "window"
+        },
+        {
+          "id": "9e41ca6e16d54e6d8b68c2cfb512acaa",
+          "roomId": "8550f32267a80998185bb2628e3e46fa",
+          "wallIndex": 3,
+          "offset_mm": 1500,
+          "width_mm": 1200,
+          "height_mm": 1500,
+          "sill_mm": 800,
+          "type": "window"
+        },
+        {
+          "id": "50b6bca511347926bf93b2520e9bacea",
+          "roomId": "4bbb0b32796b25deb52db910059f101c",
+          "wallIndex": 0,
+          "offset_mm": 800,
+          "width_mm": 880,
+          "height_mm": 2010,
+          "sill_mm": 0,
+          "type": "door",
+          "swing": {
+            "hinge": "end",
+            "side": "out"
+          }
+        },
+        {
+          "id": "c7df1786e0573be3d6c074b7a63c8d15",
+          "roomId": "4bbb0b32796b25deb52db910059f101c",
+          "wallIndex": 2,
+          "offset_mm": 800,
+          "width_mm": 980,
+          "height_mm": 2010,
+          "sill_mm": 0,
+          "type": "door",
+          "swing": {
+            "hinge": "start",
+            "side": "in"
+          }
+        },
+        {
+          "id": "7f99b7a1f355097a2fbbf2e02b183674",
+          "roomId": "4bbb0b32796b25deb52db910059f101c",
+          "wallIndex": 1,
+          "offset_mm": 900,
+          "width_mm": 880,
+          "height_mm": 2010,
+          "sill_mm": 0,
+          "type": "door",
+          "swing": {
+            "hinge": "end",
+            "side": "out"
+          }
+        },
+        {
+          "id": "10954639ff0332187d3890c8fa730346",
+          "roomId": "11aa915dfe8a23c77b6ed8a994ecec8a",
+          "wallIndex": 0,
+          "offset_mm": 1000,
+          "width_mm": 2000,
+          "height_mm": 1100,
+          "sill_mm": 1050,
+          "type": "window"
+        },
+        {
+          "id": "4adbdcefe36758815c3c8de126a35214",
+          "roomId": "11aa915dfe8a23c77b6ed8a994ecec8a",
+          "wallIndex": 2,
+          "offset_mm": 300,
+          "width_mm": 880,
+          "height_mm": 2010,
+          "sill_mm": 0,
+          "type": "door",
+          "swing": {
+            "hinge": "end",
+            "side": "in"
+          }
+        },
+        {
+          "id": "5d0902ee68dbf250693c5e5392b9f7c3",
+          "roomId": "11aa915dfe8a23c77b6ed8a994ecec8a",
+          "wallIndex": 1,
+          "offset_mm": 1500,
+          "width_mm": 1200,
+          "height_mm": 1500,
+          "sill_mm": 900,
+          "type": "window"
+        },
+        {
+          "id": "b3ff3348c45b4a6737804cfca3f9b032",
+          "roomId": "6f9be9d265e9e7b5c08ce93a569223a7",
+          "wallIndex": 2,
+          "offset_mm": 2000,
+          "width_mm": 1600,
+          "height_mm": 1400,
+          "sill_mm": 900,
+          "type": "window"
+        },
+        {
+          "id": "e5f14e6e65403fb37b611affea91caf5",
+          "roomId": "d91bb7a0ff0ada18cb60f16ea09e6ebc",
+          "wallIndex": 2,
+          "offset_mm": 800,
+          "width_mm": 800,
+          "height_mm": 800,
+          "sill_mm": 1300,
+          "type": "window"
+        }
+      ]
+    },
+    {
+      "id": "0421a5687ee715075b6502b9c5630008",
+      "name": "Attic",
+      "level": 1,
+      "rooms": [
+        {
+          "id": "f22f16defc663c773562c5a607a5b82e",
+          "name": "Attic bedroom",
+          "origin": {
+            "x": 0,
+            "y": 0
+          },
+          "rotation_deg": 0,
+          "walls": [
+            {
+              "id": "6ba7363747d7274df6ff044bbb5ca55e",
+              "length_mm": 5500,
+              "angle_deg": 90,
+              "thickness_mm": 300,
+              "kind": "exterior",
+              "height_mm": 1000,
+              "slope_deg": 42
+            },
+            {
+              "id": "e7309a2ae9a7ecb230040ecd268aad88",
+              "length_mm": 7100,
+              "angle_deg": 90,
+              "thickness_mm": 100
+            },
+            {
+              "id": "0f65ca09a24e145d63c40709b4bfba5d",
+              "length_mm": 5500,
+              "angle_deg": 90,
+              "thickness_mm": 300,
+              "kind": "exterior",
+              "height_mm": 1000,
+              "slope_deg": 42
+            },
+            {
+              "id": "dfd4181c16bf87093cea4b1df82b4985",
+              "length_mm": 7100,
+              "angle_deg": 90,
+              "thickness_mm": 300,
+              "kind": "exterior"
+            }
+          ],
+          "diagonals": [],
+          "height_mm": 4200,
+          "finish": {
+            "floor": "laminate"
+          },
+          "furniture": [
+            {
+              "id": "adc278225ca7b3eab485bef4abcbb347",
+              "name": "Double bed",
+              "kind": "bed-double",
+              "shape": "rect",
+              "x_mm": 2750,
+              "y_mm": 5000,
+              "width_mm": 1400,
+              "depth_mm": 2000,
+              "rotation_deg": 0
+            }
+          ]
+        },
+        {
+          "id": "666e66c321eb229a7ba5add0c7ee697b",
+          "name": "Office",
+          "origin": {
+            "x": 5600,
+            "y": 0
+          },
+          "rotation_deg": 0,
+          "walls": [
+            {
+              "id": "3f66def5457dd152ccebd1bd9ab9957b",
+              "length_mm": 4500,
+              "angle_deg": 90,
+              "thickness_mm": 300,
+              "kind": "exterior",
+              "height_mm": 1000,
+              "slope_deg": 42
+            },
+            {
+              "id": "dea99557b44bae299886e11414b8f1e8",
+              "length_mm": 7100,
+              "angle_deg": 90,
+              "thickness_mm": 300,
+              "kind": "exterior"
+            },
+            {
+              "id": "f5375c7765259e1c217e1f38854f7646",
+              "length_mm": 4500,
+              "angle_deg": 90,
+              "thickness_mm": 300,
+              "kind": "exterior",
+              "height_mm": 1000,
+              "slope_deg": 42
+            },
+            {
+              "id": "83b7a6883b587e008ad5559857d2fcb5",
+              "length_mm": 7100,
+              "angle_deg": 90,
+              "thickness_mm": 100
+            }
+          ],
+          "diagonals": [],
+          "height_mm": 4200,
+          "finish": {
+            "floor": "laminate"
+          },
+          "furniture": [
+            {
+              "id": "3457cc449043757848df8ffa3d34ce0e",
+              "name": "Desk",
+              "kind": "desk",
+              "shape": "rect",
+              "x_mm": 2250,
+              "y_mm": 2300,
+              "width_mm": 1400,
+              "depth_mm": 700,
+              "rotation_deg": 0
+            }
+          ]
+        }
+      ],
+      "openings": [
+        {
+          "id": "f1509e80be93a7d2b81651dc4ac61acc",
+          "roomId": "f22f16defc663c773562c5a607a5b82e",
+          "wallIndex": 1,
+          "offset_mm": 2800,
+          "width_mm": 880,
+          "height_mm": 2010,
+          "sill_mm": 0,
+          "type": "door",
+          "swing": {
+            "hinge": "start",
+            "side": "in"
+          }
+        },
+        {
+          "id": "2e9da02b873572bbe0e2e7073f42b43d",
+          "roomId": "f22f16defc663c773562c5a607a5b82e",
+          "wallIndex": 3,
+          "offset_mm": 2800,
+          "width_mm": 1000,
+          "height_mm": 1200,
+          "sill_mm": 800,
+          "type": "window"
+        },
+        {
+          "id": "39f933c0024bda88657ffdd3342044a6",
+          "roomId": "666e66c321eb229a7ba5add0c7ee697b",
+          "wallIndex": 1,
+          "offset_mm": 2800,
+          "width_mm": 1000,
+          "height_mm": 1200,
+          "sill_mm": 800,
+          "type": "window"
+        }
+      ]
+    }
+  ],
+  "layers": [],
+  "attachments": [],
+  "meta": {},
+  "electrical": {
+    "supply": {
+      "phases": 1,
+      "network": "230",
+      "mainRating_A": 40
+    },
+    "boards": [
+      {
+        "id": "c87830cdcfc7b6b0a880322ac04862a3",
+        "name": "Main board",
+        "letter": "A",
+        "rows": [
+          {
+            "id": "9706aa9140bdd283c33e7ddfc50b3c76",
+            "modules": 13,
+            "devices": []
+          }
+        ],
+        "location": {
+          "floorId": "525fae9e16597053145053d234482f44",
+          "x_mm": 300,
+          "y_mm": 6800
+        }
+      }
+    ],
+    "points": [
+      {
+        "id": "540c047e56921c638633acd371ea10b8",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "kind": "socket2",
+        "x_mm": 150,
+        "y_mm": 1000,
+        "height_mm": 300
+      },
+      {
+        "id": "cb6a083f3e893526b47f515eef181a4a",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "kind": "socket2",
+        "x_mm": 5850,
+        "y_mm": 3500,
+        "height_mm": 300
+      },
+      {
+        "id": "e39d858474d9b400e59b59f24a286318",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "kind": "socket2",
+        "x_mm": 3000,
+        "y_mm": 150,
+        "height_mm": 300
+      },
+      {
+        "id": "cebc5e86ca08cc5b12d33349300db2ae",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "kind": "socket2",
+        "x_mm": 150,
+        "y_mm": 4300,
+        "height_mm": 300
+      },
+      {
+        "id": "10b79312128aa946fbc90615812286ea",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "kind": "socket2",
+        "x_mm": 6250,
+        "y_mm": 2200,
+        "height_mm": 300
+      },
+      {
+        "id": "c00b3749f8bc8fa081613e11355f4e26",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "kind": "socket2",
+        "x_mm": 9950,
+        "y_mm": 2200,
+        "height_mm": 300
+      },
+      {
+        "id": "e8339364121ddaae4519ebd33ac22a22",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "kind": "socket2",
+        "x_mm": 8000,
+        "y_mm": 150,
+        "height_mm": 300
+      },
+      {
+        "id": "c8940013d461ea60b5304d40ead76317",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "kind": "light",
+        "x_mm": 3000,
+        "y_mm": 1500
+      },
+      {
+        "id": "d2c631a092e57e8e3f121b3d1a8c716a",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "kind": "light",
+        "x_mm": 8100,
+        "y_mm": 1500
+      },
+      {
+        "id": "08dc894bbab2acbc34803e30f67d5333",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "kind": "light",
+        "x_mm": 1200,
+        "y_mm": 5300
+      },
+      {
+        "id": "0ac9ac5046dcabeff7bafa67e1d0038a",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "kind": "switch",
+        "x_mm": 2100,
+        "y_mm": 4750,
+        "height_mm": 1100
+      },
+      {
+        "id": "690d0192c9cc2b04b03c6f0d20555355",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "kind": "switch_2way",
+        "x_mm": 5850,
+        "y_mm": 4300,
+        "height_mm": 1100
+      },
+      {
+        "id": "ce49e8022901ef53321c4dc94af24f47",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "kind": "switch",
+        "x_mm": 6250,
+        "y_mm": 4300,
+        "height_mm": 1100
+      },
+      {
+        "id": "b0922c44baf8f7a631f268ff81ea403b",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "kind": "appliance",
+        "x_mm": 9700,
+        "y_mm": 300
+      }
+    ]
+  },
+  "utilities": {
+    "points": [
+      {
+        "id": "fd93cacb8118d69743e4af5b3495b24c",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "utility": "water",
+        "kind": "meter",
+        "x_mm": 300,
+        "y_mm": 6500
+      },
+      {
+        "id": "ec3071f38f8ec4827cfdb1c95c5055b5",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "utility": "water",
+        "kind": "tap",
+        "x_mm": 3700,
+        "y_mm": 4800
+      },
+      {
+        "id": "212920fecbaaee9e5e6d8daa57bd64ba",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "utility": "water",
+        "kind": "tap",
+        "x_mm": 7000,
+        "y_mm": 250
+      },
+      {
+        "id": "2bf1b52306fb263ff52b1ece7b4d2845",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "utility": "drain",
+        "kind": "wc",
+        "x_mm": 2800,
+        "y_mm": 5000
+      },
+      {
+        "id": "8d8c7b61fecca3898223135d8fc1820b",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "utility": "drain",
+        "kind": "stack",
+        "x_mm": 4700,
+        "y_mm": 7000
+      }
+    ],
+    "runs": [
+      {
+        "id": "0f234f6f7479736930bd3d77f31d7f4a",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "utility": "water",
+        "kind": "cold",
+        "path": [
+          {
+            "x": 300,
+            "y": 6500
+          },
+          {
+            "x": 2300,
+            "y": 6500
+          },
+          {
+            "x": 2300,
+            "y": 4800
+          },
+          {
+            "x": 3700,
+            "y": 4800
+          }
+        ],
+        "size_mm": 16
+      },
+      {
+        "id": "512206e1f12902dead6f82ed610ebe67",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "utility": "water",
+        "kind": "cold",
+        "path": [
+          {
+            "x": 2300,
+            "y": 4800
+          },
+          {
+            "x": 2300,
+            "y": 4550
+          },
+          {
+            "x": 7000,
+            "y": 4550
+          },
+          {
+            "x": 7000,
+            "y": 250
+          }
+        ],
+        "size_mm": 16
+      },
+      {
+        "id": "55caa47f11d81a9e30e77505c994c251",
+        "floorId": "525fae9e16597053145053d234482f44",
+        "utility": "drain",
+        "kind": "soil",
+        "path": [
+          {
+            "x": 2800,
+            "y": 5000
+          },
+          {
+            "x": 2800,
+            "y": 7000
+          },
+          {
+            "x": 4700,
+            "y": 7000
+          }
+        ],
+        "size_mm": 110
+      }
+    ]
+  }
+}

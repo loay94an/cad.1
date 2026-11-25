@@ -1,0 +1,38 @@
+{
+  "name": "floorplan",
+  "private": true,
+  "version": "0.9.5",
+  "type": "module",
+  "description": "Self-hosted floor plan app: type in laser-meter readings, get a to-scale plan.",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vp dev --host",
+    "build": "vue-tsc --noEmit && vp build",
+    "typecheck": "vue-tsc --noEmit",
+    "preview": "vp preview --host",
+    "test": "vp test",
+    "check": "vp check",
+    "lint": "vp lint",
+    "fmt": "vp fmt",
+    "icons": "node scripts/make-icons.mjs"
+  },
+  "devDependencies": {
+    "@types/three": "^0.187.0",
+    "@vitejs/plugin-vue": "^6.0.11",
+    "typescript": "^6.0.3",
+    "vite-plugin-pwa": "^2.0.0",
+    "vite-plus": "1.6.0",
+    "vue-tsc": "^3.3.14"
+  },
+  "overrides": {
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.6.0",
+    "vitest": "5.1.0"
+  },
+  "dependencies": {
+    "jspdf": "^4.2.1",
+    "oidc-client-ts": "^3.5.0",
+    "svg2pdf.js": "^2.9.0",
+    "three": "^0.187.0",
+    "vue": "^3.5.45"
+  }
+}

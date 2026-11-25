@@ -1,335 +1,159 @@
-<div align="center">
+# Floor Plan
 
-# ✂️ CutCraft
+A self-hosted web app for measuring and documenting your house. Type in the walls you measured with a laser meter and get a to-scale floor plan, then add doors and windows, furniture, the electrical installation, pipes, finishes and renovation plans. It runs on your phone (installable, works offline) and on a desktop.
 
-**A fast, offline, no-subscription design-and-cut studio for desktop vinyl & paper cutters - written in Rust.**
+**[Try the demo](https://lieven121.github.io/floorplan/)** and tap *Try the demo house*. The demo runs without the server, so plans stay in your browser.
 
-Design, trace, lay out and send jobs to Silhouette (Cameo / Portrait / Curio), Graphtec, Brother ScanNCut and ~120 other cutters, all from a single native binary. No account, no cloud, no monthly fee.
-
-Runs on **Windows**, **Linux** and **macOS 14+**.
-
-![CutCraft's main window](docs/screenshot.png)
-
-</div>
-
----
-
-## Table of contents
-
-- [Why CutCraft](#why-cutcraft)
-- [Highlights](#highlights)
-- [Install & run](#install--run)
-- [Features](#features)
-  - [Canvas & editing](#canvas--editing)
-  - [Text & fonts](#text--fonts)
-  - [Image tracing](#image-tracing)
-  - [Effects & distortion](#effects--distortion)
-  - [Path tools](#path-tools)
-  - [Art library](#art-library)
-  - [From the web](#from-the-web)
-  - [Packaging & production](#packaging--production)
-  - [Print & Cut](#print--cut)
-  - [Sending to a cutter](#sending-to-a-cutter)
-- [Machine & protocol support](#machine--protocol-support)
-- [File formats](#file-formats)
-- [Project layout](#project-layout)
-- [Building & testing](#building--testing)
-- [Limitations & caveats](#limitations--caveats)
-- [License](#license)
-
-A full user guide is in the [wiki](../../wiki).
-
----
-
-## Why CutCraft
-
-Most cutting software is either locked behind a subscription and a cloud account, or is a dated desktop tool that does the pro features badly. CutCraft takes the opposite stance:
-
-- **Offline & private** - your designs never leave your machine.
-- **One fast native binary** - Rust + [egui]; no Electron, no installer required.
-- **Open formats** - native files are gzipped JSON; import/export SVG, DXF, PDF, EPS (import), G-code and plotter languages.
-- **Pro features the consumer tools gate or lack** - smooth curve tracing, single-stroke (centre-line) tracing, true-shape nesting, non-destructive effect stacks, packaging dielines, Print & Cut calibration and job costing.
-- **Broad hardware support** - one app speaks to Silhouette, Graphtec, Brother ScanNCut and a large roster of vinyl and craft cutters.
-
-## Highlights
-
-**Home:** starting CutCraft without a file shows your recent designs with previews (File ▸ Home); open one, start a new design, or browse a folder of designs.
-
-**The workspace:** an icon toolbar (file, undo, clipboard, zoom, group, flip, align, weld) with a **Make it** button to send the job; a two-column tool strip on the left; and on the right a category rail - **Design, Edit, Style, Text, Image, Make, More** - each opening its panels as tabs. All icons are drawn as vectors, so they stay sharp at any size, in the dark or light theme (More ▸ Prefs).
-
-| | |
-|---|---|
-| 🖊️ **Smooth & centre-line tracing** | Traced outlines are found at sub-pixel precision and fitted with clean curves, sharp corners kept - or turned into *single strokes* for sketch pens, foil quill and engraving. |
-| 🖼️ **Subject trace** | Point it at a photo of a real object; the background is isolated and removed to give a clean cut line. |
-| 🧩 **True-shape nesting** | Outlines genuinely interlock (with rotation) to pack more onto every sheet and save material. |
-| 🪄 **Live effect stack** | Non-destructive, re-orderable Offset / Round / Warp / Simplify / Smooth per shape - tweak forever, bake when ready. |
-| 🗂️ **Make it screen** | The design split onto mats by material, line colour, fill colour or layer; pack all mats or just one; see your real mat with **PixMat**. |
-| 🎯 **Print & Cut calibration** | Print and cut a test sheet, photograph it, and CutCraft measures and corrects the offset for every Print & Cut job. |
-| 🌐 **Icons & fonts from the web** | Search open icon sets and open-licensed fonts inside CutCraft, or browse SVG Repo and FONT Repo in the built-in browser - downloads come straight in. |
-| 🔌 **Multi-protocol output** | Switchable GPGL / HP-GL / DMPL, Brother ScanNCut over USB, G-code to GRBL machines over a serial port; USB, network, Bluetooth or file. |
-
-## Install & run
-
-CutCraft is a Cargo workspace. With a recent Rust toolchain installed:
-
-```bash
-# clone, then:
-cargo run --release -p cutcraft
-```
-
-Handy invocations:
-
-```bash
-cargo run -p cutcraft -- --sample              # open a sample design
-cargo run -p cutcraft -- path/to/file.cutcraft # open a file (.svg / .dxf / image also work)
-cargo test -p cutcraft-core                     # run the core test suite
-```
-
-Requires **Rust 1.85+ (2024 edition)**. It builds and runs on **Windows**, **Linux** and **macOS 14 (Sonoma) or later**. The optimized binary is `target/release/cutcraft.exe` (Windows) / `cutcraft` (Linux/macOS). Drag-and-drop of SVG/DXF/image files onto the window works.
-
-**The built-in browser on Linux** uses WebKitGTK, so building needs its development packages. On Debian/Ubuntu:
-
-```bash
-sudo apt install libwebkit2gtk-4.1-dev libgtk-3-dev
-```
-
-(Fedora: `webkit2gtk4.1-devel gtk3-devel`; Arch: `webkit2gtk-4.1 gtk3`.) To build without the browser instead, add `--no-default-features`. WebKitGTK can only sit inside an X11 window, so on a Wayland desktop CutCraft opens through XWayland; set `CUTCRAFT_WAYLAND=1` to keep native Wayland, without the browser. On Windows (Edge WebView2, part of Windows 10/11) and macOS (the system WebKit) the browser is always built in.
-
-**Graphics:** CutCraft draws with the graphics chip. At start-up it tries DirectX 12 on Windows (Vulkan on Linux, Metal on macOS) on a real graphics chip, then OpenGL - older chips without DirectX 12 usually still have an OpenGL driver - and only if both fail, Windows' slow software renderer, so it still opens on a PC with no working graphics driver. If the GPU renderer ever crashes at start-up, the next start switches to OpenGL by itself (delete `use-opengl` in the settings folder to try the GPU again); set `CUTCRAFT_RENDERER=gl` to force OpenGL. Each start writes `startup.log` to the settings folder (`%APPDATA%\CutCraft` on Windows); its `graphics:` line names the chip and renderer in use - "Basic Render Driver" or `Cpu` means software drawing, which installing the chip maker's driver (Intel/AMD/NVIDIA, not Windows Update) fixes. The window only redraws when something changes, so it sits at near-zero CPU while idle.
+![The ground floor of a demo house, with floor finishes, a wall to demolish (yellow) and a new wall (red)](docs/screenshots/floor.png)
 
 ## Features
 
-### Canvas & editing
+### Measuring and drawing
+- **Rooms from walls.** Go round the room clockwise and type each wall's length. Corners are 90° until you type an angle (a corner that sticks into the room is 270°).
+- **Measurements never add up exactly.** The app spreads the error over the walls and shows how far off each one was. Diagonals (corner to corner) let it find the real corner angles.
+- **Rooms into a floor.** Drag a room next to another one: it snaps to the shared wall and keeps the wall thickness between them. Turn rooms, line them up with a wall, lock them in place.
+- **Doors, windows and openings**, placed by their distance from either corner, with the frame thickness and whether the size you measured includes the frame. Hinged doors with the way they swing, or sliding (glass) doors. Drag them along the wall.
+- **Several floors**, with the floor below or above drawn through as an outline.
+- **Wall heights, floor levels, stairs and slopes** (ramps), going up or down. In 3D, stairs are just the steps, or solid if you tick it.
+- **Chimneys, columns, ducts and masonry blocks:** solid parts of the building in a room, drawn like walls and up to the ceiling in 3D.
+- **Sloped ceilings** for attic rooms: knee wall height and roof pitch per wall. The plan shows the line where the free height drops below the usable headroom (1.80 m by default, adjustable), and the usable floor area.
+- **Measuring tape** on the floor view for distances and areas.
 
-- Page on a cutting mat, snapping grid, rulers, multiple pages and layers, cut-lines-only view.
-- **Edit bar** above the canvas - type the selection's X/Y, width/height (mm or %), lock the aspect ratio, enter a rotation, and pick which of 9 anchor points they refer to; with text selected it also shows font, size, bold/italic and weld. Dragging or typing in a field is one undo step.
-- **Curves stay curves** - weld, subtract, intersect, divide and the other shape combinations work on the curves themselves (with [linesweeper]), so a welded heart is a few smooth curves rather than hundreds of short straight cuts, and the result is exact.
-- **Shape builder** (Shift+M) - select overlapping shapes, then drag across the areas you want to merge into one shape; Alt-drag (or Alt-click) deletes areas instead. Every area is outlined as you hover, and what's left of each shape keeps its colour.
-- **Measure** (M) - drag between two points for the distance, ΔX/ΔY and angle; nothing is added. **Dimension** - drag to add a labelled dimension line (a drawing aid: not cut, not printed). **Trim** - click a piece of a path to delete it back to the nearest lines crossing it. All three snap to objects and guides.
-- **Symmetry drawing** (View → Symmetry) - shapes you draw are repeated as you draw them: mirror left-right, top-bottom, four-way, or radial mandala (2-64 copies, optionally mirroring alternate slices like a kaleidoscope), about the page centre or the selection's centre. Ghost copies and the axes show while drawing; the set is grouped.
-- **Layer colours** - new shapes take the current layer's colour; moving shapes to another layer, or changing a layer's colour, recolours the shapes that were using the old layer colour (custom colours are kept). **Apply layer colours** (Layers panel) gives every outlined shape its layer's colour. Outline colour is what "By line colour" cutting uses.
-- **Window / crossing selection** - drag a box left to right to select only shapes wholly inside it (solid blue box); drag right to left to select anything whose lines the box touches, and pictures it overlaps (dashed green box). Shift adds to the selection.
-- **Ruler guides** - drag from the top or left ruler to place a guide; drag a guide to move it, or back onto a ruler to remove it (View → Clear guides removes them all). Guides are saved with the design but never cut; drawing, point edits and Smart Guides snap to them.
-- **Smart Guides** - while moving, the selection's edges and centre snap into line with other shapes and the page, with guide lines shown. **Snap to objects** - drawing and point edits snap to other shapes' corners, centres and nodes. Both toggle in the View menu.
-- Zoom (wheel / Ctrl±) and pan (middle-drag / Shift+wheel / Pan tool).
-- **Right-click context menu** built from what you selected: a cut shape gets point editing, offset and effects; a picture gets image tools, trace and erase; text gets text tools; several objects get combine and align. Flatten only shows when something prints.
-- Tools: select (move/scale/rotate handles, Shift to constrain), rubber-band select, node editing (drag nodes & handles, add/delete points, line ⇄ curve), line, polyline, smooth curve, freehand, rectangle, rounded rectangle, ellipse, polygon, star, text, knife, eraser, zoom. Their settings (corner radius, polygon sides, star points, eraser size) are in **Edit ▸ Drawing tools**.
-- **Round-corner tool** - click any corner of a path to round or chamfer just that corner; rounded corners can be resized again, and radius 0 makes one sharp.
-- **Image tool** - four modes in the edit bar: **Erase** (brush parts away), **Restore** (brush them back from the original), **Select & erase** (click an area of one colour - e.g. a white background - to clear it, with a tolerance and an *everywhere* option), and **Crop** (drag a box to keep just that part).
-- **Cut a picture with a shape** - draw any shape over a picture, select both, and **Keep inside shape** (the picture outside goes, and it's trimmed to the shape) or **Cut shape out** (a see-through hole), with smooth edges. The shape stays as a ready cut line for Print & Cut, or can be removed. In the Image panel and the right-click menu.
-- **Parametric design** (Parameters tab) - named values (`thickness = 3`, `slot = thickness + 0.2`) and locked sizes and distances whose values are numbers or formulas (mm, or `2in` / `5cm`). Select one shape to lock its width or height (pick which edge stays still), or two to lock the distance between them (the smaller one moves). Change a parameter and everything that uses it updates; constraints are kept as you edit, shown on the canvas as blue dimensions (View → Show constraints), and saved with the design. A size lock scales the shape, so rounded corners stretch with it.
-- **History panel** - every undo step listed by name (Move, Resize, Weld, Fill & Line…); click one to jump back to it, or forward again to a greyed step you undid.
-- Editing: 200-step undo/redo, cut/copy/paste/paste-in-place/duplicate, group/ungroup, arrange, flip, rotate, scale, shear, align & distribute, weld, subtract, **subtract all** (every shape on top cuts through whatever it overlaps underneath - many holes in one shape, or one shape through several), intersect, **exclude** (remove only the overlaps; each shape keeps its colour), **unite** (cut as one welded outline but keep the parts - ungroup to separate), divide (every separate area, however many shapes overlap), compound make/release, convert to path, offset (inner/outer, round/sharp), simplify/smooth.
-- Replicate: rows, columns, rotate, mirror, fill page, advanced (count + offset + per-step rotation).
-- **Blend** (Edit ▸ Replicate) - any number of steps between two shapes: the outline morphs from one to the other (a circle into a star), with the colours and line width in between. Graduated layers for paper and shadow-box art.
-- **Fit into box** - scale a design (or text) to fit inside the largest selected shape, centred.
-- Style: fill & line colours (with a **Transparent** swatch, a working opacity slider, and a **screen eyedropper** that picks a colour from anywhere on screen - Windows), line thickness, cut style (no-cut / cut / cut-edge / perforate), don't-print flag.
-- **Contour** (Style ▸ Fill & Line) - tick which of a shape's outlines are cut, to hide inner lines without breaking the shape up; hovering a line highlights it. It's a live effect, so it can be changed back any time.
-- **Flatten / Unflatten** - turn a selection into one printed picture with a single outer cut line for Print Then Cut; Unflatten brings the original shapes back.
-- **Pattern fill** (Style ▸ Fill & Line) - fill a shape with a repeating picture (tile size and angle) to print; its outline is still cut.
-- **Colour sync** (Style ▸ Colours) - every line colour in the design with its shape count; click a swatch to select those shapes, or merge one colour into another so they cut together on one material.
+| Room editor | Attic with sloped ceilings |
+|---|---|
+| ![Room editor with walls, corner angles and wall types](docs/screenshots/room-editor.png) | ![Attic floor with the 1.80 m headroom lines](docs/screenshots/attic.png) |
 
-### Text & fonts
+### Renovation
+- **Room finishes:** floor covering (tiles, laminate, parquet, vinyl, carpet, concrete, screed, or your own text), wall and ceiling finish, and whether the room has skirting boards. The plan can tint rooms by their floor covering.
+- **Wall types:** exterior or interior, load-bearing, and existing / new / to demolish. New walls are drawn red and walls to demolish yellow and dashed (the usual Belgian convention), load-bearing walls are hatched. Exports get a legend. A wall between two rooms can be set on both sides at once. Where a wall changes type halfway, split it with a straight 180° corner; remove the corner to join it again.
+- **Versions:** save the plan as a named version ("Current", "After renovation"), look at an older version read-only, restore it (the current state is kept as an automatic version first), or start a separate plan from it.
 
-- Any installed font; size, bold/italic, alignment, character & line spacing, vertical text, text-on-a-path, convert to path.
-- **Curve text** - bend text round a circle with one slider (Text panel or the edit bar): positive arches it up like a badge, negative curves it into a smile; it stays editable text.
-- **Kerning** - adjust the space between any two letters (Text panel: pick the pair, drag the slider).
-- **Glyphs** - every character a font contains (swashes, symbols, accents) in a clickable grid in the Text panel.
-- **Ungroup to letters / lines** - split a text into one editable text per letter (or per line), each exactly where it was, to nudge or rotate letters individually.
-- **Weld letters** - fuse overlapping letters of script fonts into one outline so the blade doesn't cut through every join.
-- **CutCraft Single Line** - a built-in stroke font (full printable ASCII): each letter is one pen stroke, for fast sketch-pen, foil or engrave text.
-- **Web fonts** (Text ▸ Web fonts) - 2,000+ open-licensed fonts from [Fontsource] to add with one click, or **Add font file…** for any `.ttf` / `.otf`. Added fonts live in CutCraft's own fonts folder - no system install needed.
-- **Font creation** - assign drawn or traced shapes to keys (one at a time or a whole alphabet left-to-right), use the font immediately, and export a real TrueType `.ttf`.
-- **Mail merge** - `{{Field}}` placeholders, CSV import (quoted fields; `,`, `;` or tab), one copy per row laid out in a grid across extra pages. Built-in fields `{{serial}}`, `{{serial:0000}}`, `{{row}}`, `{{date}}`, `{{time}}`, plus **numbered copies** without any CSV (e.g. tags reading "No. 001…100").
-- **Monogram** - classic three-letter monogram (large surname initial centred) with none / circle / ring / diamond frame; letters stay editable.
-- **Spell-check** - Hunspell dictionaries (auto-detects LibreOffice/OpenOffice or `%APPDATA%\CutCraft\dictionaries`), suggestions, add-to-dictionary.
+| Versions | Looking at an older version |
+|---|---|
+| ![Versions dialog](docs/screenshots/versions.png) | ![An older version shown read-only, with a banner](docs/screenshots/version-look.png) |
 
-### Image tracing
+### Quantities
+Per room and per floor: floor area, usable area, perimeter, skirting length (minus doors), wall area gross and net (minus doors and windows, following sloped ceilings), ceiling area (sloped parts at their real size), and doors and windows. Also floor area per covering, length and area of new walls and walls to demolish, metres of pipe and the number of electrical points. Save it as a spreadsheet (CSV that opens directly in Excel or LibreOffice with Belgian settings: `;` and decimal comma).
 
-- **Upload wizard** - importing a picture asks how it'll be used: **Print Then Cut image** (printed, with a cut line round it), **Cut image** (just its outer shape) or **Flat graphic** (printed, not cut), with one-click **background removal** and a preview of the cut line.
-- **Smooth, sharp cut lines** - outlines are found between the pixels at sub-pixel precision (using the picture's own anti-aliased edges), small wobbles are evened out, and the result is fitted with as few Bézier curves as the **Smoothness** setting allows, with real corners kept sharp - no pixel stair-steps.
-- **Brightness** and **colour** trace with blur, despeckle, outer-edge-only and curve fitting, with live preview.
-- **Subject** trace - isolates an object from a plain background (flood-fill from the borders) for photos of real items.
-- **Auto threshold** - one-click Otsu split.
-- **Centre-line** mode - skeletonises the shape to single-stroke open paths for pens, foil and engraving.
-- **Image tools** - non-destructive **adjustments** (brightness, contrast, gamma, sharpen, auto-levels, invert, remove background, and Sketch / Line-art / Edges effects) with a live preview, feeding:
-  - **Photo → lines** - redraw a photo as a single continuous **spiral**, rows of **waves**, or **stipple** dots: line art for sketch pens.
-  - **Shadow box** - split a picture into 2-8 stacked papercut plates by brightness (front plate most open, back plate solid) for backlit layered art.
-  - Optional *bake into image* to apply the adjustments permanently (e.g. before tracing).
-- **PixScan** - print a four-marker sheet, photograph your item on it, markers are detected (or drag the corners onto known points), perspective is removed and the photo is placed at true size.
+![Quantities per room, with totals and grouped lists](docs/screenshots/quantities.png)
 
-### Effects & distortion
+### 3D
+The house in 3D: walls with their door and window openings, sloped ceilings, stairs, furniture, floor coverings and the renovation colours. One floor or the whole house; ceilings hidden, see-through or solid. Save it as a picture.
 
-- **Live, non-destructive effect stack** per shape: add/reorder/remove Offset, Round-corners, any envelope Warp, Simplify and Smooth; tweak live, then *Release to paths* to bake.
-- One-shot distortions: arch, bulge, bridge, wave, flag, perspective, barrel, tuna-can, title-crawl, rays, 3D rotate; plus drop shadow, long cast shadow, 3D extrude (wireframe) and corner rounding.
-- Rhinestone templates (outline / double outline / fill), sketch/hatch pen fill, sticker contour, weed box & weed lines, jigsaw puzzle.
-- **Shadow & blackout layers** - a solid outer silhouette behind the artwork (blackout removes all interior detail; shadow grows it by an offset) for HTV/paper stacking.
-- Stipple (grid / hex / random / edge / dithered-image), emboss (concentric or hatch), pop-up cards (strut cuts, fold lines, art above the fold).
+| Ground floor | Whole house |
+|---|---|
+| ![3D view of the ground floor](docs/screenshots/3d.png) | ![3D view of the whole house with the attic](docs/screenshots/3d-house.png) |
 
-### Path tools
+### Installations
+- **Electrical:** sockets, lights, switches (linked to the lights they control), appliances and fuse boxes on the plan (the *situatieschema*). Fuse boxes with circuits and breakers, the single-line diagram (*eendraadschema*) as SVG or PDF, and a check against the main rules of the Belgian AREI.
+- **Utilities:** water, drainage, heating, ventilation and gas: points (taps, meters, drains, radiators, …) and pipe runs, with their lengths.
 
-Convex hull, lattice (grid of holes), knockout (recess), stencil bridges (keep islands attached), line-fill / engrave, symmetrical mirror, remove-double-lines, join open paths, pierce points, and object-on-path (repeat a motif along a path, rotated to the tangent).
+![Electrical mode with the symbol bar](docs/screenshots/electrical.png)
 
-### Scripting
+### Notes, furniture and export
+- **Notes and photos:** numbered note dots anywhere in a room, each with text, photos and documents (photos need the server).
+- **Furniture** from a list of common sizes, dragged and turned in the room, with its height and how high above the floor it hangs (wall cupboards and shelves are dashed on the plan). While you drag, a piece lines up with the walls and with the edges and centres of other pieces (Ctrl: free, Shift: in a straight line); hold Alt to see its distance to the walls and furniture around it. Give pieces a colour, and put them in a group (a table and its chairs) to move and turn them together.
+- **Lining up electrical and utility points:** a dragged socket, switch, tap or radiator snaps onto a nearby wall and lines up with other points and room corners (Ctrl: free, Shift: in a straight line, Alt: distances to the walls).
+- **Copy and paste** furniture, doors, windows and electrical points (Ctrl+C, Ctrl+V, Ctrl+D or the duplicate button), also into another room or floor, and put the lists in your own order.
+- **Undo and redo** in the room editor (Ctrl+Z, Ctrl+Y), back to when you opened the room; Escape while dragging puts a piece back.
+- **Export:** PDF to scale (1:50, 1:100, … on A4 or A3, with a scale bar to check with a ruler), PNG, JPG, SVG, and the whole project as one JSON file (with the photos) to import again later. Choose what each export shows.
+- **Keyboard shortcuts** on a desktop (press `?`), undo and redo.
 
-- A built-in **[Rhai] scripting panel** for parametric generators - real loops and maths plus geometry builders (`rect`, `circle`, `ellipse`, `line`, `polygon`, `star`, `poly`, `polyline`) and helpers (`page_w()`, `page_h()`, `pi()`, `rad()`). Mandalas, grids and spirographs are a few lines; shapes land on the current layer. Scripts run under operation/recursion/memory limits.
+| Export | On a phone |
+|---|---|
+| ![Export dialog with a preview](docs/screenshots/export.png) | ![The floor view on a phone](docs/screenshots/phone-floor.png) |
 
-### Art library
+### Where plans are kept
+- **On the device:** without an account, plans are saved in the browser (IndexedDB). Export the project file to keep a backup.
+- **On your server:** sign in with your own OIDC provider (Authentik, Keycloak, …) and plans, versions, photos and documents are saved on the server. Share a plan with someone by email as viewer or editor. Plans on the device can be uploaded to the account.
 
-- **Shapes** - about 120 ready-made shapes in groups: squares and rectangles (plain, rounded, cushion, scalloped, wavy, zigzag, pinked, postage-stamp, ticket, pills), polygons, triangles, circles (bursts, scallops, bites, halves, quarters, slices), ellipses, hearts, stars, arrows, and others (spade, club, diamond, crescent, arch, fan, rings, drop, leaf, egg, bow tie, crosses, trefoil, quatrefoil, flowers, pennant, ribbon, lightning, keyhole, cloud, speech bubble, house, gift tag…). All built from geometry, so every one is a clean cut line at any size.
-- **Borders** - 18 strips for card edges, frames and trims, made to any length and height: scallops, wave, zigzag, pinked, wavy ribbon, torn paper, grass, ocean waves, picket fence, castle, bead / heart / star chains, diamond lattice, bunting, lace scallops and a flower row.
-- **Product templates** - T-shirt, baby bodysuit, mug wrap, tote, greeting card and cushion outlines in real sizes, with the usual design area dashed, on a locked “Template” layer (never cut or printed) - size and place your design on the product.
-- **Templates** - true-size blanks: round / square / hexagon coasters, ornament, keychain, dog tag, luggage tag, bookmark, name plate (with their holes).
-- **Sign / plaque maker** - rectangle, rounded, oval or plaque (corners cut inward), with 0-4 mounting holes.
+## Running it
 
-### From the web
+### Docker (app and server in one container)
 
-- **Icons** (Style ▸ Icons) - search about 200,000 icons in [Iconify]'s open icon sets from inside CutCraft, each showing its set and licence; click one to add it. Outline-style icons drawn with strokes are turned into solid cuttable outlines.
-- **Any SVG** - paste an SVG's link (an SVG Repo page link works too), paste SVG code copied from a website (**Paste SVG**, or Ctrl+V on the canvas), or drop a file on the window.
-- **Built-in browser** (Windows, macOS and Linux) - browse [SVG Repo] and [FONT Repo] in a movable, resizable window inside CutCraft; click a site's **Download** button and the file comes straight in - SVGs into the design, fonts into the font list, anything else through the normal import. **Block ads** refuses requests to ~130 ad and tracking networks (extendable with your own `adblock.txt`); on Windows it also turns on strict tracking prevention.
+One image holds the PWA and the ASP.NET Core API. It is published as `ghcr.io/lieven121/floorplan` for amd64 and arm64 (a Raspberry Pi works). You need an OIDC provider (Authentik, Keycloak, …) with this client:
 
-### Packaging & production
+- **Type:** public (no secret), Authorization Code with PKCE
+- **Redirect URI:** the app's address with the trailing slash, e.g. `https://floorplan.example.com/`
+- **Post-logout redirect URI:** the same address
+- **Web origin:** `https://floorplan.example.com`
+- **Scopes:** `openid profile email` (add `offline_access` on Authentik to stay signed in)
 
-- **Dielines** - parametric tuck-end carton (walls, glue tab, tuck & dust flaps), pillow box (curved caps) and pocket envelope, each with cut outline + fold/score lines.
-- **Barcodes** - Code 39, Code 128 and QR, printed or cut as a stencil, optional human-readable text.
-- **True-shape nesting** and **fill-sheet batch** - nest as many copies as fit per sheet, with a copies-per-sheet and sheets-for-N-pieces readout.
-- **Cost estimate** - material + labour cost per job and per piece, with a waste factor.
-- Tile/slice oversized designs across multiple pages - with straight overlapping seams, or **dovetail / puzzle-knob joints** so the pieces lock together (big signs, wall art).
+The provider walkthroughs are in [server/README.md](server/README.md#oidc-provider).
 
-### Print & Cut
+Put this in a `docker-compose.yml`, fill in your provider, and run `docker compose up -d`:
 
-- **Print** (File ▸ Print…, Ctrl+P) straight to a printer at true size - the Windows print dialog, or the system's printers through CUPS on macOS and Linux - lined up with the paper's corner so Print & Cut marks land where the cutter expects them.
-- Registration marks with a safe area, vector PDF print export, and an interactive camera-mark search on the Graphtec protocol.
-- **Calibration wizard** - adds a test sheet (registration marks, five dots, a square to cut round each, and fine rulers); print it, cut or pen it, then photograph or scan it. CutCraft finds the dots and squares, allows for the camera angle, and works out the shift, turn and size error - or read the rulers by eye and type the numbers in. The correction is saved per machine and applied to every Print & Cut job.
+```yaml
+services:
+  floorplan:
+    image: ghcr.io/lieven121/floorplan:0.9   # or :latest, or an exact version like :0.9.0
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - floorplan-data:/data
+    environment:
+      Oidc__Authority: https://auth.example.com/application/o/floorplan/
+      Oidc__ClientId: floorplan
+      # Oidc__Scopes: openid profile email offline_access   # on Authentik
+      # Oidc__Audience: account                              # on Keycloak without an audience mapper
 
-### Sending to a cutter
+volumes:
+  floorplan-data:
+```
 
-- **Make it screen** - the design split onto mats, one per material (**one material / by line colour / by fill colour / by layer**), each previewed with its fills and the mat's grid. Pick a mat to see it large; drag shapes to reposition them - **drag a box or Shift-click to select several** - and hide them or move them to another mat; set each mat's material, action, tool and mirror (mirrored mats are shown as they'll be cut). **Copies** lay out that many copies and overflow onto new mats; **Pack mats** arranges everything tightly by the pieces each mat actually cuts, and **right-clicking a mat** packs just that one or puts it back to the design layout. Then **Cut this mat** (or **Send this mat to ScanNCut**) one mat at a time - finished mats get a tick.
-- **Production queue** (Make ▸ Queue) - line up several designs (CutCraft files, SVG, DXF, PDF, FCM… several at once, or a snapshot of the design open now), give each its number of copies, reorder them, then **Cut the queue**: they open together on the Make it screen as one production run, a page per job, with each job's mats labelled by its name. The run is a new, unsaved design, so your files stay as they are.
-- **PixMat** - photograph your loaded mat, line up its corners, and the straightened photo becomes the mat background, so you can drag shapes onto the scraps or printed material actually on it.
-- Job modes: simple / action-by-line-colour / by-fill-colour / by-layer.
-- Per-group material, action, tool, **mirror** (for iron-on / HTV - ticked automatically for heat-transfer materials), carriage, force, speed, blade depth, passes, overcut and blade compensation; user material presets; copies.
-- Inside-first cut ordering, overcut, perforation, multi-pass.
-- Animated cut-order preview with cut length and time estimate.
-- **Tool-change prompts** - a job that needs a different tool part-way (pen, then blade, on one carriage) pauses with “Load the … in carriage N”, then carries on in the same place.
-- Test cut; status and firmware query.
-- Output over USB, network (TCP), Bluetooth (BLE) or to a file.
+To build the image from the source instead, clone the repository and use its `docker-compose.yml`:
 
-## Machine & protocol support
+```bash
+cat > .env <<'ENV'
+OIDC_AUTHORITY=https://auth.example.com/application/o/floorplan/
+OIDC_CLIENT_ID=floorplan
+ENV
+docker compose up -d --build
+```
 
-CutCraft ships ~120 machine profiles. Selecting a machine sets the correct wire protocol automatically; you can also switch it manually under **Send ▸ Protocol**.
+The app listens on port 8080 and keeps its data in the `floorplan-data` volume. Put it behind your TLS reverse proxy. See [server/README.md](server/README.md) for the settings, the provider setup and the API.
 
-| Protocol | Machines (examples) | Notes |
-|---|---|---|
-| **GPGL** | Silhouette Cameo 1-5 / Portrait 1-4 / Curio, Graphtec | 20 units/mm, ETX-terminated. Community dialect (default) + an experimental **Graphtec dialect** that mirrors the Silhouette/Graphtec `TB`-block start-cut, `FX…,0` force and an interactive `DETECT` / `mark_status;` registration search. |
-| **HP-GL** | GCC (Expert/Jaguar/Puma), Roland (CAMM-1 GX/GS), USCutter, Siser (Romeo/Juliet/Momento), Mutoh, SkyCut, Secabo, Foison, Vinyl Express, Pazzles, and many more | For most vinyl cutters. |
-| **DMPL** | Summa (S-class / D60), Houston Instrument, Tenneth | Digital Microprocessor Plotter Language. |
-| **GRBL (G-code over serial)** | Hobby CNC drag knives, pen plotters and diode lasers running GRBL 1.1, grblHAL or FluidNC | Pick **GRBL machine** in Page setup (or the language under Send ▸ Protocol), choose the serial port and **Connect**. Streams with GRBL's flow control, shows the machine's position, jogs, homes, unlocks, sets the origin, frames the job and has a console. The tool goes down by Z axis, servo pen lift or laser (each group's Force is its power); each group's Speed sets the feed. Stop holds the machine then resets it, so it keeps its position. |
-| **Cricut Maker 3 (cutcutgo firmware)** | Maker 3 running a cutcutgo port | GRBL with its own rules: found by USB id, one line at a time, pen, fine-point blade and holder B's drive-housing tools (rotary, knife, scoring wheels, perforation, wavy, debossing, engraving: recognised by the machine, with Load tool and Detect tool buttons and a check at the start of each job), each with its own saved height and speed, the knife blade's 3 mm tip compensation, every move checked against the mat's 301 mm work area (12 x 12 or 12 x 24 in mat), **Print & Cut** by scanning a printed box with the machine's light sensor, Pause / Resume, and a guided way to find a tool height. |
-| **Cricut Explore 3 (cutcutgo firmware)** | Explore 3 running the cutcutgo port | The same as the Maker 3 with the pen and the fine-point blade only (no drive housing or tool scan): CutCraft homes it for every job (its clamps can lose steps), keeps the clamps above Z-8.5, and lets the pen go to X 335 and the blade to X 297.4. Print & Cut works as on the Maker 3, using the Explore's own sensor position. |
-| **Cricut Maker (cutcutgo firmware)** | The original Cricut Maker running the cutcutgo port (servo build) | The same as the Maker 3: the pen, the fine-point blade and the drive-housing tools with Detect tool, and Print & Cut. It has its own heights (the pen draws at about Z-9), holder B reach and sensor position, and CutCraft warns if the connected machine isn't the model chosen. |
-| **Brother ScanNCut** | CM300/350/550DX/650W, SDX85/125/135/225/230D/325/330D/1000/1200/2200D | **Sent over USB** straight to the machine (put it on its home screen, then **Send to ScanNCut**) - it replies whether it took the file, and CutCraft tells you if it needs to go back to the home screen. Or **Save .fcm…** for CanvasWorkspace or a USB stick. Cut groups cut, Sketch/Score groups draw with the pen, Emboss groups emboss; curves stay curves and the machine does its own blade compensation. 12 × 12 and 12 × 24 in mats. |
+### Static files only (no accounts)
 
-**Transports**
+`npm run build` and serve `dist/` from any static web server with HTTPS (needed to install the app). Plans then stay on each device. For example on Home Assistant: copy `dist/` to `config/www/floorplan/` and open `https://<your-home-assistant>/local/floorplan/`. After an update, reload the page twice.
 
-- **Cross-platform USB** via [`nusb`] - bulk transfers on **Linux, macOS and Windows**, auto-discovering the device's bulk endpoints (Linux needs udev permissions; Windows/macOS need the device bound to a generic USB driver, e.g. WinUSB via [Zadig]). Brother ScanNCut machines use the same transport (they ship on the WinUSB driver on Windows).
-- **Windows-native USB** two extra ways: **WinUSB bulk pipes** and the legacy **USB printer-class** interface. The scan lists every option it finds.
-- **Network (TCP)**, **Bluetooth (BLE)** and **file** output also work cross-platform.
+## Development
 
-> Other proprietary binary machines (Cricut on its original firmware, KNK/Zing, Janome) are intentionally **not** supported - their command streams are undocumented binary protocols. A Cricut Maker 3 running the **cutcutgo** firmware is supported, as a GRBL machine.
+Requires Node 22.18+ and, for the server, the .NET 10 SDK.
 
-## File formats
+```bash
+npm install
+npm run dev        # http://localhost:5173, also reachable from your phone on the LAN
+npm test           # unit tests (geometry, file format, quantities, electrical rules)
+npm run lint
+npm run build      # type-check (vue-tsc) + build → dist/
+```
 
-| | Import | Export |
-|---|---|---|
-| **Native** | `.cutcraft` (gzip JSON) | `.cutcraft` |
-| **Vector** | SVG / SVGZ, DXF, PDF, EPS / PostScript, Adobe Illustrator `.ai` (all versions) | SVG (with opacity), cut-lines-only SVG, DXF, PDF (Print & Cut) |
-| **Raster** | PNG, JPEG, GIF, BMP, TIFF, WebP | - |
-| **Cutter / CNC** | HP-GL (`.plt`, `.hpgl`), Brother ScanNCut `.fcm` | Brother ScanNCut `.fcm`, GPGL, HP-GL (`.plt`), DMPL, G-code (CNC / laser / pen, Z-lift or M3/M5 spindle) |
-| **Fonts** | `.ttf`, `.otf` (added to CutCraft) | `.ttf` (fonts made in CutCraft) |
+```bash
+cd server/Floorplan.Api && dotnet run   # API on http://localhost:5080; the dev server proxies /api to it
+cd server && dotnet test
+```
 
-**Crash recovery:** while there are unsaved changes, a backup is written in the background to the settings folder's `recovery` directory (every 5 minutes by default; Prefs → "Back up unsaved work every", 0 = off). Saving or closing normally deletes it; if CutCraft closed unexpectedly, the next start offers to restore it. Each open window keeps its own backup, so running two copies is safe. Saving is atomic (written to a temporary file, then swapped in), so a crash mid-save can't corrupt the design. CutCraft also remembers its window's position and size, and where you left each popup.
+In Development the API runs without sign-in; the app offers the test users `dev`, `alice` and `bob` to try sharing.
 
-**PDF / AI import** reads the first page's vector paths (lines, curves, rectangles, nested forms) with their fill and stroke colours, at true size; text and embedded images are skipped, with a note in the status bar - convert text to outlines before exporting. **HP-GL import** reads PU/PD/PA/PR, SP (each pen gets its own colour), CI and AA/AR arcs, at 40 units/mm - including CutCraft's own `.plt` export. **EPS import** reads Illustrator EPS (and the PostScript-based `.ai` files of Illustrator 8 and earlier) by their drawing commands, and EPS from other programs (Inkscape/cairo, CorelDRAW…) through a small PostScript interpreter: paths, transforms, colours, fill and stroke, plus embedded pictures, which come in as images (ready for Image Trace). Text is skipped with a note. **Silhouette Studio import** (`.studio3`, Studio 3 and later) reads the design's outlines (lines and curves, true size, where they sit on the mat) and its pictures, placed in their frames - so a Print & Cut design comes in with its picture and cut line. The format isn't published, so this is worked out from real files: text, colours and cut settings aren't brought over yet (export SVG/DXF from Silhouette Studio for those).
+Stack: Vite+ (`vp`), Vue 3 (Composition API, TypeScript), three.js, jsPDF + svg2pdf.js, vite-plugin-pwa; ASP.NET Core 10, EF Core with SQLite.
 
 ## Project layout
 
-```
-crates/
-  cutcraft-core/   UI-free library (all geometry, model, I/O and cutter logic - fully unit-tested)
-    doc.rs         Document → Page → Layers + Shapes (path/text/image/group/warp), styles, effect stacks
-    geom.rs        flatten, booleans (on curves), offset, stroke outlines, simplify, smooth, dash, primitives
-    shapebuilder.rs  overlapping shapes split into areas: Shape builder and Divide
-    curvefit.rs    Bézier curve fitting with sharp corners kept (tracing)
-    ops.rs         transform, align/distribute, group, arrange, weld…divide, compound, knife, eraser, replicate
-    text.rs        system and added fonts → outlines; text on path, curved text
-    trace.rs       bitmap → vector: sub-pixel outlines, threshold / colour / subject, Otsu, centre-line
-    effects.rs     rhinestones, hatch, contour, weeding, puzzle, true-shape nesting, fill-sheet, tiling, stipple, emboss, pop-up
-    effectstack.rs non-destructive per-shape effect stack
-    fx.rs          envelope distortions, shadows, extrude, round corners
-    pathtools.rs   hull, lattice, knockout, bridges, line fill, mirror, dedupe, join, pierce
-    shapelib.rs    the shape and border library
-    dieline.rs     parametric packaging nets (tuck box / pillow box / envelope)
-    regmarks.rs    Print & Cut registration marks
-    calibration.rs Print & Cut calibration sheet, photo measurement and correction
-    prepare.rs     the Make it screen's mats: splitting, packing, per-mat layout
-    queue.rs       the production queue: several designs as one run
-    cutjob.rs      job generation, ordering, overcut, compensation, time + cost estimate
-    gpgl.rs        GPGL encoder, HP-GL (.plt) and DMPL export, interactive reg-mark search
-    grbl.rs        G-code for GRBL machines and the serial link (streaming, status, jog, stop)
-    device.rs      transports (nusb, WinUSB bulk + printer-class USB, TCP, Bluetooth, file) + background streaming
-    brother_usb.rs sending .fcm files to a Brother ScanNCut over USB
-    fcm.rs         Brother ScanNCut .fcm import/export (on the vendored fcmlib)
-    web.rs         Iconify icon search, Fontsource fonts, SVG links
-    adblock.rs     the built-in browser's ad and tracker blocklist
-    machines.rs    ~120 machine profiles · materials.rs presets · prefs.rs preferences
-    io.rs          .cutcraft, SVG/DXF import+export, PDF, images, G-code
-    pdfimport.rs   PDF / Illustrator path import (lopdf)
-    studio3.rs     Silhouette Studio .studio3 import (outlines and pictures)
-    epsimport.rs   EPS / PostScript import (Illustrator drawing commands, a small PostScript interpreter)
-    blend.rs       Blend: steps morphing one shape into another
-    hpglimport.rs  HP-GL plotter file import
-    trim.rs        Trim tool geometry
-    params.rs      parameters, formulas and the constraint solver
-  cutcraft/        egui desktop app (canvas, tools, panels, menus, shortcuts, Make it screen, browser, icon)
-  fcmlib/          vendored Brother .fcm reader/writer (MPL-2.0)
-```
+| Path | What it does |
+| --- | --- |
+| `src/model/` | The project file format (`schema.ts`, versioned), import and upgrades (`migrate.ts`), electrical, utilities, furniture, finishes and quantities. |
+| `src/geometry/` | Walls → closed outline (least-squares fit with diagonals), rooms on a floor, shared walls, sloped ceilings, measuring. |
+| `src/components/` | Vue screens: plan list, floor view, room editor, 3D, quantities, versions, export, fuse boxes. |
+| `src/three/house.ts` | Builds the 3D model. |
+| `src/electrical/` | Single-line diagram and AREI checks. |
+| `src/export/exporters.ts` | PDF, SVG, PNG/JPG and JSON export. |
+| `src/storage/` | `StorageAdapter`: IndexedDB on the device, or the REST API. |
+| `server/` | ASP.NET Core API: homes, sharing, files, versions. |
 
-## Building & testing
-
-```bash
-cargo build --release -p cutcraft   # optimized app binary
-cargo test                          # all tests (core + app)
-cargo clippy                        # lints
-```
-
-The core crate is UI-free, so almost all behaviour (geometry, tracing, nesting, encoders, cost) is covered by fast unit tests without a display.
-
-## Limitations & caveats
-
-- **Cutter output is mostly unverified on hardware.** Sending to a Brother ScanNCut over USB has been tested on a real machine; the GPGL commands follow public community documentation (plus an experimental Graphtec dialect) and HP-GL/DMPL follow the standard command shapes. **Always run a Test cut on scrap first**, and compare against a USB capture of your machine (USBPcap + Wireshark) if anything misbehaves. The Graphtec reg-mark coordinate arguments and AutoBlade depth (`TF…`) are the least certain parts.
-- **Non-Silhouette machine specs are nominal** - cut widths and USB IDs for the broad roster are placeholders; verify for your exact model and set the media size yourself.
-- **Bluetooth** picks the vendor service with a writable + notifying characteristic; if your machine exposes several, set the UUIDs under *Send ▸ Bluetooth ▸ Advanced*. Untested against a real cutter.
-- **The screen eyedropper is Windows-only** for now; everything else works on Linux and macOS too. The built-in browser on Linux needs X11 or XWayland (see [Install & run](#install--run)), and on macOS and Linux its ad blocking runs inside the page rather than in the web view itself, so it catches slightly less than on Windows. The macOS and Linux browser builds are compile-checked but haven't yet been tried on those systems.
-- **Licences** - icons and fonts from the web carry their own licences (shown in CutCraft); many free fonts are for personal use only.
-- **PixScan** uses CutCraft's own marker sheet, not Silhouette's PixScan mat.
-- **Spell-check** needs a Hunspell dictionary installed (none ships with CutCraft).
-- Firmware updates and a cloud library are out of scope.
+The screenshots in `docs/screenshots/` show a made-up demo house.
 
 ## License
 
-CutCraft is free software, released under the [GNU General Public License v3.0](LICENSE) or (at your option) any later version. You're free to use, study, share, change and even sell it - but anyone who distributes CutCraft, or a modified version of it, must share the source code under the same licence. It comes with no warranty.
-
-`crates/fcmlib` is a vendored copy of [fcmlib](https://github.com/justjanne/fcmlib) by Janne Mareike Koschinski, used under the Mozilla Public License 2.0 (its `LICENSE.md` is kept alongside it); CutCraft's only change is porting its parser from nom 7 to nom 8. Its byte-for-byte round-trip test runs against Brother's sample files, which aren't included (they're copyright their owners): `FCM_SAMPLES=path/to/samples cargo test -p fcmlib -- --ignored`.
-
-CutCraft is an independent project and is not affiliated with, or endorsed by, Silhouette America, Graphtec, Brother or any machine manufacturer. Product names are trademarks of their respective owners.
-
-[egui]: https://github.com/emilk/egui
-[linesweeper]: https://crates.io/crates/linesweeper
-[Rhai]: https://rhai.rs
-[Zadig]: https://zadig.akeo.ie/
-[`nusb`]: https://github.com/kevinmehall/nusb
-[Iconify]: https://iconify.design
-[Fontsource]: https://fontsource.org
-[SVG Repo]: https://www.svgrepo.com
-[FONT Repo]: https://www.fontrepo.com
+[MIT](LICENSE)

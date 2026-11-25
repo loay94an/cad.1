@@ -1,0 +1,9 @@
+node_modules/
+dist/
+dev-dist/
+*.log
+.DS_Store
+# .NET build output and local dev data (database, uploaded files)
+bin/
+obj/
+server/Floorplan.Api/data/
