@@ -1,4 +1,5 @@
 const translations: Record<string, string> = {
+  "Select a floor": "اختر طابقاً",
   "”": "»",
   "✎ Edit": "✎ تحرير",
   "parts": "أجزاء",
