@@ -591,6 +591,10 @@ const translations: Record<string, string> = {
   'each step': 'كل درجة',
   'Optional. Measure from one corner to another across the room; this tells the app the real corner angles. They\'re drawn as dashed lines.': 'اختياري. قِس المسافة من ركن إلى آخر عبر الغرفة؛ فهذا يساعد التطبيق على تحديد الزوايا الفعلية للأركان. تُعرض هذه القياسات على شكل خطوط متقطعة.',
   'C2 side': 'جهة C2',
+  '+ Sub-board': '+ لوحة فرعية',
+  '+ Fuse box': '+ لوحة قواطع',
+  'Module': 'وحدة',
+  'module': 'وحدة',
 };
 
 const attributes = ['title', 'aria-label', 'placeholder', 'alt'];
@@ -669,6 +673,13 @@ function translateText(value: string): string {
 
     [/^(.+) (cm|m|mm) high(?: · floor (.+) (cm|m|mm))?(?: · (.+))?$/, (m) => `${m[1]} ${m[2] === 'cm' ? 'سم' : m[2] === 'mm' ? 'مم' : 'م'} ارتفاعاً${m[3] ? ` · منسوب الأرضية ${m[3]} ${m[4] === 'cm' ? 'سم' : m[4] === 'mm' ? 'مم' : 'م'}` : ''}${m[5] ? ` · ${translateText(m[5])}` : ''}`],
     [/^The plan itself stays as it is\.$/, () => 'سيبقى المخطط نفسه كما هو.'],
+
+    [/^Delete (.+)$/, (m) => `حذف ${m[1]}`],
+    [/^Circuit (.+)$/, (m) => `الدائرة ${m[1]}`],
+    [/^Distance from C(\d+)$/, (m) => `المسافة من C${m[1]}`],
+    [/^C(\d+) side$/, (m) => `جهة C${m[1]}`],
+    [/^(.+) · changed (.+)$/, (m) => `${m[1]} · تم التعديل ${m[2]}`],
+    [/^(\d+) modules?$/, (m) => `${m[1]} ${m[1] === '1' ? 'وحدة' : 'وحدات'}`],
   ];
   for (const [pattern, render] of rules) {
     const match = translated.trim().match(pattern);
