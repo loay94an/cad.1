@@ -7,6 +7,7 @@ on:
     paths:
       - 'src/**'
       - 'public/**'
+      - 'scripts/**'
       - 'index.html'
       - 'package.json'
       - 'package-lock.json'
@@ -47,6 +48,8 @@ jobs:
         run: |
           npx cap add android
           npx cap sync android
+      - name: Apply custom launcher icon
+        run: bash scripts/configure-android-icon.sh
       - name: Configure Maven Central mirror
         run: |
           find android -type f -name '*.gradle' -exec sed -i '/mavenCentral()/i\\        maven { url "https://maven-central.storage-download.googleapis.com/maven2/" }' {} +
