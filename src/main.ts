@@ -5,4 +5,9 @@ import './styles.css';
 
 // In the hidden iframe of a silent renew, only pass the provider's answer to the app.
 if (isSilentRenewFrame()) void finishSilentRenew();
-else createApp(App).mount('#app');
+else {
+  document.documentElement.lang = 'ar';
+  document.documentElement.dir = 'rtl';
+  document.documentElement.setAttribute('data-locale', 'ar');
+  createApp(App).mount('#app');
+}
