@@ -75,7 +75,7 @@ const translations: Record<string, string> = {
   'Tap the next point': 'المس النقطة التالية',
   'Tap a point to start. It snaps to corners and walls.': 'المس نقطة للبدء. يلتقط المؤشر الزوايا والجدران تلقائياً.',
   'Tap the first point for the area': 'المس النقطة الأولى لتحديد المساحة',
-  'Show the whole floor': 'إظهار الطابق بالكامل',
+
 };
 
 const attributes = ['title', 'aria-label', 'placeholder', 'alt'];
