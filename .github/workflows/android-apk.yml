@@ -48,6 +48,9 @@ jobs:
         run: |
           npx cap add android
           npx cap sync android
+      - name: Configure Maven Central mirror
+        run: |
+          find android -type f \\( -name '*.gradle' -o -name '*.gradle.kts' \\) -print0 | xargs -0 -r sed -i '/mavenCentral()/i\\    maven { url "https://maven-central.storage-download.googleapis.com/maven2/" }'
       - name: Build debug APK
         working-directory: android
         run: |
