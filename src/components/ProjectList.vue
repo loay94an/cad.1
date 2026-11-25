@@ -169,7 +169,7 @@ async function upload(p: ProjectSummary) {
   }
 }
 
-const when = (s: string) => new Date(s).toLocaleString();
+const when = (s: string) => new Date(s).toLocaleString('ar');
 </script>
 
 <template>
