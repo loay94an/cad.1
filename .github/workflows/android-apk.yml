@@ -50,7 +50,22 @@ jobs:
           npx cap sync android
       - name: Configure Maven Central mirror
         run: |
-          find android -type f \\( -name '*.gradle' -o -name '*.gradle.kts' \\) -print0 | xargs -0 -r sed -i '/mavenCentral()/i\\    maven { url "https://maven-central.storage-download.googleapis.com/maven2/" }'
+          find android -type f | grep -E '\\.gradle(\\.kts)?
+      - name: Build debug APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon assembleDebug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: floorplan-arabic-android-debug
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
+ | while IFS= read -r file; do
+            sed -i '/mavenCentral()/i\\        maven { url "https://maven-central.storage-download.googleapis.com/maven2/" }' "$file"
+          done
       - name: Build debug APK
         working-directory: android
         run: |
