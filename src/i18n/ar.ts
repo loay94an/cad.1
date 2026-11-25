@@ -7,7 +7,6 @@ const translations: Record<string, string> = {
   'read-only': 'للقراءة فقط',
   '– none –': '– لا شيء –',
   'Lengths in {{ unit }}, areas in m². Wall areas are the inside faces up to the ceiling, following sloped ceilings. A door in a wall between two rooms counts for both rooms, and once in the totals.': 'الأطوال بوحدة {{ unit }} والمساحات بالمتر المربع. تُقاس مساحة الجدران على أوجهها الداخلية حتى السقف مع مراعاة الأسقف المائلة. يُحتسب الباب في الجدار المشترك بين غرفتين لكلتا الغرفتين، ويُحتسب مرة واحدة فقط ضمن الإجمالي.',
-  'Optional. Measure from one corner to another across the room; this tells the app the real corner angles. They\'re drawn as dashed lines.': 'اختياري. قِس المسافة من ركن إلى آخر عبر الغرفة لتحديد زوايا الأركان الفعلية. تظهر هذه القياسات بخطوط متقطعة.',
   'The whole floor': 'الطابق بالكامل',
   'No rooms on': 'لا توجد غرف في',
   'yet.': 'بعد.',
