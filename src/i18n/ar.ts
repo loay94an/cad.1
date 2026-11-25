@@ -591,7 +591,6 @@ const translations: Record<string, string> = {
   'each step': 'كل درجة',
   'Optional. Measure from one corner to another across the room; this tells the app the real corner angles. They\'re drawn as dashed lines.': 'اختياري. قِس المسافة من ركن إلى آخر عبر الغرفة؛ فهذا يساعد التطبيق على تحديد الزوايا الفعلية للأركان. تُعرض هذه القياسات على شكل خطوط متقطعة.',
   'C2 side': 'جهة C2',
-  'The arrow points the way it goes, up or down. Drag it in the drawing; Turn changes its direction. Rise is the total height it climbs. Going down starts at this room\'s floor and leaves an opening in it. In 3D, stairs are just the steps unless you tick Solid.': 'يشير السهم إلى اتجاه الحركة صعوداً أو نزولاً. اسحبه داخل الرسم، ويغيّر أمر التدوير اتجاهه. الارتفاع هو إجمالي الارتفاع الذي يصعده. عند النزول يبدأ من أرضية هذه الغرفة ويترك فتحة فيها. في العرض ثلاثي الأبعاد تظهر الدرجات فقط ما لم تفعّل خيار مصمت.',
 };
 
 const attributes = ['title', 'aria-label', 'placeholder', 'alt'];
