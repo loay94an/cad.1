@@ -576,6 +576,22 @@ const translations: Record<string, string> = {
   'Remove corner': 'إزالة الركن',
   'On the plan:': 'على المخطط:',
   'In Electrical mode, pick this circuit and tap on the plan to add points.': 'في وضع الكهرباء، اختر هذه الدائرة والمس المخطط لإضافة نقاط إليها.',
+  'Solid parts of the building in the room: a chimney breast, a column, a duct, a block of masonry. X and Y are its centre from C1, along W1 and into the room. Drag it in the drawing. Height empty: up to the ceiling.': 'العناصر الإنشائية المصمتة داخل الغرفة، مثل مدخنة أو عمود أو مجرى أو كتلة بناء. يمثّل X وY مركز العنصر مقاساً من C1 وعلى امتداد W1 باتجاه داخل الغرفة. اسحبه في الرسم. إذا تركت الارتفاع فارغاً فسيصل العنصر إلى السقف.',
+  'Chimney': 'مدخنة',
+  'Column': 'عمود',
+  'Duct': 'مجرى',
+  'Masonry block': 'كتلة بناء',
+  'Depth': 'العمق',
+  'Above floor': 'ارتفاعه عن الأرضية',
+  'Tap the drawing… (cancel)': 'المس الرسم… (إلغاء)',
+  '+ Add note': '+ إضافة ملاحظة',
+  'tap to show': 'المس للعرض',
+  'Coming later: sockets, switches, lights and circuits; water and drain pipes; radiators and heating pipes. Each will be its own layer that you can show or hide on the plan, with heights and photos.': 'ستتوفر لاحقاً: المقابس والمفاتيح والإنارة والدوائر الكهربائية، وأنابيب المياه والصرف، والمشعات وأنابيب التدفئة. سيكون لكل منها طبقة مستقلة يمكن إظهارها أو إخفاؤها على المخطط، مع الارتفاعات والصور.',
+  'Solid': 'مصمت',
+  'each step': 'كل درجة',
+  'Optional. Measure from one corner to another across the room; this tells the app the real corner angles. They\'re drawn as dashed lines.': 'اختياري. قِس المسافة من ركن إلى آخر عبر الغرفة؛ فهذا يساعد التطبيق على تحديد الزوايا الفعلية للأركان. تُعرض هذه القياسات على شكل خطوط متقطعة.',
+  'C2 side': 'جهة C2',
+  'The arrow points the way it goes, up or down. Drag it in the drawing; Turn changes its direction. Rise is the total height it climbs. Going down starts at this room\'s floor and leaves an opening in it. In 3D, stairs are just the steps unless you tick Solid.': 'يشير السهم إلى اتجاه الحركة صعوداً أو نزولاً. اسحبه داخل الرسم، ويغيّر أمر التدوير اتجاهه. الارتفاع هو إجمالي الارتفاع الذي يصعده. عند النزول يبدأ من أرضية هذه الغرفة ويترك فتحة فيها. في العرض ثلاثي الأبعاد تظهر الدرجات فقط ما لم تفعّل خيار مصمت.',
 };
 
 const attributes = ['title', 'aria-label', 'placeholder', 'alt'];
@@ -635,6 +651,23 @@ function translateText(value: string): string {
     [/^Shared with (.+):$/, (m) => `مشترك مع ${m[1]}:`],
     [/^Also set on the wall of (.+)$/, (m) => `تطبيق الإعداد نفسه على جدار ${m[1]}`],
     [/^Remove corner C(\d+) \(join W(\d+) and W(\d+)\)$/, (m) => `إزالة الركن C${m[1]} (دمج W${m[2]} وW${m[3]})`],
+
+    [/^Enter the length of wall (\\d+)\\.$/, (m) => `أدخل طول الجدار ${m[1]}.`],
+    [/^The corner angles add up to (.+)°, but a room with (\\d+) walls needs (.+)°\\. A corner that sticks into the room is 270°\\.$/, (m) => `مجموع زوايا الأركان ${m[1]}°، لكن الغرفة ذات ${m[2]} جدران تحتاج إلى ${m[3]}°. الركن البارز إلى داخل الغرفة زاويته 270°.`],
+    [/^The angle at C(\\d+) had to change by (.+)° to fit the walls\\.$/, (m) => `تغيّرت الزاوية عند C${m[1]} بمقدار ${m[2]}° لتتوافق مع الجدران.`],
+    [/^The walls don't meet: before correction the outline was (.+) cm off\\. Check for a typo or a wrong angle\\.$/, (m) => `الجدران لا تلتقي: كان محيط الشكل قبل التصحيح غير متطابق بمقدار ${m[1]} سم. تحقق من وجود خطأ في القياس أو الزاوية.`],
+    [/^Wall (\\d+) had to change by (.+) mm to fit the other measurements\\.$/, (m) => `تغيّر طول الجدار ${m[1]} بمقدار ${m[2]} مم ليتوافق مع بقية القياسات.`],
+    [/^Diagonal C(\\d+)–C(\\d+) had to change by (.+) mm to fit\\.$/, (m) => `تغيّر القطر بين C${m[1]} وC${m[2]} بمقدار ${m[3]} مم ليتوافق مع القياسات.`],
+    [/^(.+) · (.+) m²$/, (m) => `${translateText(m[1])} · ${m[2]} م²`],
+    [/^each step (.+) cm high, (.+) cm deep$/, (m) => `ارتفاع كل درجة ${m[1]} سم، وعمقها ${m[2]} سم`],
+    [/^(.+) m² of (.+) m² has (.+) m headroom or more$/, (m) => `${m[1]} م² من أصل ${m[2]} م² لها ارتفاع صافٍ لا يقل عن ${m[3]} م`],
+    [/^Group (.+): (\\d+) pieces, they move together$/, (m) => `المجموعة ${m[1]}: ${m[2]} قطع تتحرك معاً`],
+    [/^Remove corner C(\\d+) \\(join W(\\d+) and W(\\d+)\\)$/, (m) => `إزالة الركن C${m[1]} (دمج W${m[2]} وW${m[3]})`],
+    [/^length fitted (.+) mm$/, (m) => `تمت ملاءمة الطول بمقدار ${m[1]} مم`],
+    [/^angle fitted to (.+)°$/, (m) => `تمت ملاءمة الزاوية إلى ${m[1]}°`],
+    [/^guessed corner drawn at (.+)°$/, (m) => `رُسم الركن التقديري بزاوية ${m[1]}°`],
+    [/^Runs past the end of W(\\d+) \\((.+) (.+)\\)$/, (m) => `يتجاوز نهاية الجدار W${m[1]} (${m[2]} ${m[3]})`],
+    [/^The plan itself stays as it is\\.$/, () => 'سيبقى المخطط نفسه كما هو.'],
   ];
   for (const [pattern, render] of rules) {
     const match = translated.trim().match(pattern);
