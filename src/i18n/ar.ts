@@ -622,6 +622,11 @@ const translations: Record<string, string> = {
   'cores': 'موصلات',
   'RCDs in series': 'قواطع تفاضلية على التوالي',
   'single-line diagram': 'المخطط الكهربائي أحادي الخط',
+  'The drawing could not be turned into a picture.': 'تعذر تحويل الرسم إلى صورة.',
+  'The picture could not be saved.': 'تعذر حفظ الصورة.',
+  'The plan doesn't fit on': 'لا يتناسب المخطط مع الورق المحدد',
+  'Project file saved': 'تم حفظ ملف المشروع',
+  'Keep it somewhere safe; you can import it again later.': 'احتفظ به في مكان آمن؛ يمكنك استيراده مجدداً لاحقاً.',
 };
 
 const attributes = ['title', 'aria-label', 'placeholder', 'alt'];
@@ -732,6 +737,14 @@ function translateText(value: string): string {
     [/^(.+) is linked to a breaker that no longer exists\.$/, (m) => `${m[1]} مرتبط بقاطع لم يعد موجوداً.`],
     [/^(.+?)(?: in (.+))? has no switch linked to it\.$/, (m) => `${m[1]}${m[2] ? ` في ${m[2]}` : ''} لا يوجد مفتاح مرتبط به.`],
     [/^(.+?)(?: in (.+))? doesn't control any light yet\.$/, (m) => `${m[1]}${m[2] ? ` في ${m[2]}` : ''} لا يتحكم في أي مصباح بعد.`],
+
+    [/^The plan doesn't fit on (.+) at 1:(.+)\. Use 1:(.+) or bigger paper\.$/, (m) => `المخطط لا يتناسب مع ورق ${m[1]} بمقياس 1:${m[2]}. استخدم مقياس 1:${m[3]} أو ورقاً أكبر.`],
+    [/^PDF saved at 1:(.+) on (.+?)(?:, (\d+) pages)?\.$/, (m) => `تم حفظ PDF بمقياس 1:${m[1]} على ورق ${m[2]}${m[3] ? `، ${m[3]} صفحات` : ''}.`],
+    [/^(SVG|PNG|JPG) saved(?: \((\d+) files, one per floor\))?\.$/, (m) => `تم حفظ ${m[1]} بنجاح${m[2] ? ` (${m[2]} ملفات، ملف لكل طابق)` : ''}.`],
+    [/^Project file saved(?: with (\d+) photos?\/documents?)?\. Keep it somewhere safe; you can import it again later\.$/, (m) => `تم حفظ ملف المشروع${m[1] ? ` مع ${m[1]} صور ومستندات` : ''}. احتفظ به في مكان آمن؛ يمكنك استيراده مجدداً لاحقاً.`],
+    [/^Remove "(.+)" from this room\?$/, (m) => `إزالة «${m[1]}» من هذه الغرفة؟`],
+    [/^Stop sharing with (.+)$/, (m) => `إيقاف المشاركة مع ${m[1]}`],
+    [/^Open (.+)$/, (m) => `فتح ${m[1]}`],
   ];
   for (const [pattern, render] of rules) {
     const match = translated.trim().match(pattern);
