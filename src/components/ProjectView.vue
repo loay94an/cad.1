@@ -389,7 +389,7 @@ function writeDraft() {
   return putDraft(draftUser, toRaw(project.value)).catch((e) => console.warn('Could not keep the changes on this device', e));
 }
 
-const when = (iso: string) => new Date(iso).toLocaleString();
+const when = (iso: string) => new Date(iso).toLocaleString('ar');
 
 /** Keep the version from this device. The one in your account is kept as an automatic version. */
 async function useDraft() {
@@ -561,7 +561,7 @@ function backToLatest() {
 async function restoreVersion(v: VersionSummary) {
   const p = project.value;
   if (!p || viewOnly.value) return;
-  const label = `“${v.name}” (${new Date(v.createdAt).toLocaleString()})`;
+  const label = `“${v.name}” (${new Date(v.createdAt).toLocaleString('ar')})`;
   if (!confirm(`Restore ${label}?
 
 The plan as it is now is saved first as an automatic version “Before restore”, so you can go back to it.`)) return;
@@ -570,7 +570,7 @@ The plan as it is now is saved first as an automatic version “Before restore�
     await flushSave();
     const doc = await props.storage.getVersion(p.id, v.id);
     if (!doc) throw new Error('This version could not be found.');
-    await props.storage.putVersion(p.id, `Before restore ${new Date().toLocaleString()}`, latest, true);
+    await props.storage.putVersion(p.id, `قبل الاستعادة ${new Date().toLocaleString('ar')}`, latest, true);
     looking.value = null;
     showVersions.value = false;
     showPlan(prepare({ ...doc, id: p.id, createdAt: latest.createdAt }));
@@ -1112,7 +1112,7 @@ function setHeight(e: Event) {
       <div v-if="looking" class="version-banner" @pointerdown.stop>
         <span>
           Looking at <strong>{{ looking.version.name }}</strong>
-          ({{ new Date(looking.version.createdAt).toLocaleDateString() }}) · read-only
+          ({{ new Date(looking.version.createdAt).toLocaleDateString('ar') }}) · read-only
         </span>
         <button v-if="!viewOnly" class="btn small" @click="restoreVersion(looking.version)">↺ Restore this</button>
         <button class="btn small primary" @click="backToLatest">Back to the latest</button>
