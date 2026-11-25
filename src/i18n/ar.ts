@@ -525,23 +525,23 @@ function translateText(value: string): string {
     [/^Draw a (pipe|duct): (.+)$/, (m) => `ارسم ${m[1] === 'pipe' ? 'أنبوباً' : 'مجرى هواء'}: ${translateText(m[2])}`],
     [/^(Wall height|Floor level|Length|Width) \((.+)\)$/, (m) => `${({ 'Wall height':'ارتفاع الجدار', 'Floor level':'منسوب الأرضية', Length:'الطول', Width:'العرض' } as Record<string,string>)[m[1]]} (${m[2]})`],
 
-    [/^Delete the version “(.+)”\\? The plan itself stays as it is\\.$/, (m) => `حذف الإصدار «${m[1]}»؟ سيبقى المخطط نفسه كما هو.`],
+    [/^Delete the version “(.+)”\? The plan itself stays as it is\\.$/, (m) => `حذف الإصدار «${m[1]}»؟ سيبقى المخطط نفسه كما هو.`],
     [/^“(.+)” is in your plan list \\(‹ All plans\\)\\.$/, (m) => `أُضيف «${m[1]}» إلى قائمة مخططاتك.`],
     [/^“(.+)” is already here\\.([\\s\\S]*)$/, (m) => `«${m[1]}» موجود بالفعل.${m[2] ? ' اختر الاستبدال أو الاستيراد كنسخة.' : ''}`],
     [/^“(.+)” is now in your account\\.([\\s\\S]*)$/, (m) => `«${m[1]}» أصبح الآن في حسابك.${m[2] ? ' هل تريد حذف النسخة الموجودة على هذا الجهاز؟' : ''}`],
-    [/^Delete “(.+)”\\? The plan itself stays as it is\\.$/, (m) => `حذف «${m[1]}»؟ سيبقى المخطط نفسه كما هو.`],
-    [/^Delete "(.+)" (.+)\\? Export it first if you want to keep a copy\\.$/, (m) => `حذف «${m[1]}» ${m[2]}؟ صدّر المخطط أولاً إذا أردت الاحتفاظ بنسخة.`],
-    [/^\\d+ walls?$/, (m) => m[0].replace('walls','جدران').replace('wall','جدار')],
+    [/^Delete “(.+)”\? The plan itself stays as it is\\.$/, (m) => `حذف «${m[1]}»؟ سيبقى المخطط نفسه كما هو.`],
+    [/^Delete "(.+)" (.+)\? Export it first if you want to keep a copy\\.$/, (m) => `حذف «${m[1]}» ${m[2]}؟ صدّر المخطط أولاً إذا أردت الاحتفاظ بنسخة.`],
+    [/^\d+ walls?$/, (m) => m[0].replace('walls','جدران').replace('wall','جدار')],
 
     [/^Delete "(.+)" with all its rooms/, (m) => `حذف «${m[1]}» مع جميع غرفه؟`],
 
     [/^Could not (load the plan|save|create the plan|delete|save the version|open the version|delete the version|share|remove): (.+)$/, (m) => `تعذر ${({ 'load the plan':'تحميل المخطط', save:'حفظ المخطط', 'create the plan':'إنشاء المخطط', delete:'حذف المخطط', 'save the version':'حفظ الإصدار', 'open the version':'فتح الإصدار', 'delete the version':'حذف الإصدار', share:'مشاركة المخطط', remove:'الإزالة' } as Record<string,string>)[m[1]]}: ${m[2]}`],
     [/^Upload failed: (.+)$/, (m) => `فشل رفع الملف: ${m[1]}`],
-    [/^HTTP (\\d+)$/, (m) => `خطأ HTTP رقم ${m[1]}`],
+    [/^HTTP (\d+)$/, (m) => `خطأ HTTP رقم ${m[1]}`],
     [/^Sign-in failed: (.+)$/, (m) => `فشل تسجيل الدخول: ${translateText(m[1])}`],
     [/^TypeError: Failed to fetch$/, () => 'تعذر الاتصال بالخادم. تحقق من اتصال الإنترنت وحاول مجدداً.'],
-    [/^([A-Z]+) (.+): (\\d{3}) (.*)$/, (m) => `فشل الطلب ${m[1]}: رمز الخادم ${m[3]}.`],
-    [/^Delete the version “(.+)”\\? The plan itself stays as it is\\.$/, (m) => `حذف الإصدار «${m[1]}»؟ سيبقى المخطط نفسه كما هو.`],
+    [/^([A-Z]+) (.+): (\d{3}) (.*)$/, (m) => `فشل الطلب ${m[1]}: رمز الخادم ${m[3]}.`],
+    [/^Delete the version “(.+)”\? The plan itself stays as it is\\.$/, (m) => `حذف الإصدار «${m[1]}»؟ سيبقى المخطط نفسه كما هو.`],
   ];
   for (const [pattern, render] of rules) {
     const match = translated.trim().match(pattern);
