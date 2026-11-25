@@ -1,4 +1,11 @@
 const translations: Record<string, string> = {
+  "✎ Edit": "✎ تحرير",
+  "parts": "أجزاء",
+  ") · read-only": ") · للقراءة فقط",
+  "(join W": "(دمج W",
+  "and W": "وW",
+  "↺ Restore": "↺ استعادة",
+  "walls": "الجدران",
   "📷 Log in to add photos and documents: they're kept in your account, not on this device.": "📷 سجّل الدخول لإضافة الصور والمستندات؛ فهي تُحفظ في حسابك وليس على هذا الجهاز.",
   "📷 Take photo": "📷 التقاط صورة",
   "📎 Add photo or file": "📎 إضافة صورة أو ملف",
