@@ -1,4 +1,6 @@
 const translations: Record<string, string> = {
+  "Lengths in": "الأطوال بوحدة",
+  ", areas in m². Wall areas are the inside faces up to the ceiling, following sloped ceilings. A door in a wall between two rooms counts for both rooms, and once in the totals.": "، والمساحات بالمتر المربع. تُقاس مساحة الجدران على أوجهها الداخلية حتى السقف مع مراعاة الأسقف المائلة. يُحتسب الباب في الجدار المشترك بين غرفتين لكلتا الغرفتين، ويُحتسب مرة واحدة فقط ضمن الإجمالي.",
   'Log in to add photos and documents: they\'re kept in your account, not on this device.': 'سجّل الدخول لإضافة الصور والمستندات؛ فهي تُحفظ في حسابك وليس على هذا الجهاز.',
   '📄 Diagram': '📄 المخطط',
   'The AREI check finds': 'أظهر فحص AREI وجود',
