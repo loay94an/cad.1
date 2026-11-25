@@ -29,8 +29,8 @@ const columns: { key: keyof Totals | 'covering'; label: string; title?: string }
 ];
 
 function save() {
-  const csv = quantitiesCsv(q.value, `${props.project.name} – quantities (${new Date().toLocaleDateString()})`);
-  downloadBlob(new Blob([csv], { type: 'text/csv;charset=utf-8' }), `${safeName(props.project.name)}-quantities.csv`);
+  const csv = quantitiesCsv(q.value, `${props.project.name} – الكميات (${new Date().toLocaleDateString('ar')})`);
+  downloadBlob(new Blob([csv], { type: 'text/csv;charset=utf-8' }), `${safeName(props.project.name)}-الكميات.csv`);
 }
 </script>
 
